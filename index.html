@@ -35,7 +35,6 @@
     justify-content: center;
     font-family: 'Inter', sans-serif;
     overflow: hidden;
-    cursor: pointer; /* makes it obvious you can click */
   }
 
   body::before {
@@ -171,26 +170,13 @@
   <a class="contact-link" href="https://mail.google.com/mail/?view=cm&fs=1&to=mrex@larping.top">Contact ME! :3</a>
 
   <script>
-    const audio = document.getElementById('bg-music');
-    let hasStarted = false;
-
-    function tryAutoplay() {
-      audio.volume = 0.5;
-      audio.play().catch(() => {});
-    }
-
-    function unlockAudio() {
-      if (hasStarted) return;
-      hasStarted = true;
-      audio.muted = false;
-      audio.play().catch(() => {});
-    }
-
-    document.addEventListener('DOMContentLoaded', tryAutoplay);
-
-    document.addEventListener('click', unlockAudio);
-    document.addEventListener('touchstart', unlockAudio);
-    document.addEventListener('keydown', unlockAudio);
+    document.addEventListener('DOMContentLoaded', () => {
+        const audio = document.getElementById('bg-music');
+        if (audio) {
+          audio.volume = 0.5;
+          audio.play();
+        }
+    });
 
     for (let i = 0; i < 20; i++) {
       const dust = document.createElement('div');
