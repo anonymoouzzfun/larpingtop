@@ -79,7 +79,8 @@
     z-index: 1;
     pointer-events: none;
   }
-  
+
+  /* Main Container */
   .container {
     position: relative;
     z-index: 10;
@@ -179,7 +180,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    perspective: 1000px;
+    perspective: 1000px; /* Essential for 3D depth */
     padding: 0 35px;
   }
 
@@ -292,6 +293,7 @@
     line-height: 1.5;
   }
 
+  /* Footer (Smaller) */
   .footer {
     z-index: 20;
     margin-bottom: 3rem; 
@@ -342,6 +344,7 @@
     transform: translateY(-2px); 
   }
 
+  /* Modal */
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -434,6 +437,7 @@
     background: rgba(239, 68, 68, 0.8);
   }
 
+  /* Animations */
   @keyframes fadeInDown {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -458,6 +462,7 @@
   <div class="noise-overlay"></div>
   <canvas id="particle-canvas"></canvas>
 
+  <!-- Modal for Card Click -->
   <div class="modal-overlay" id="modal">
     <div class="modal-content">
       <button class="close-modal">&times;</button>
@@ -470,6 +475,7 @@
   </div>
 
   <div class="container">
+    <!-- Hero Section -->
     <div class="hero">
       <div class="hero-title">
         <a class="larp-link" id="larp-link" href="https://larping.top/larp-flight.png" target="_blank">LARP</a>ing?
@@ -478,7 +484,8 @@
         i dont know whats that...
       </div>
     </div>
-    
+
+    <!-- Hall of Shame Slider -->
     <div class="shame-section">
       <div class="shame-header">
         <div class="shame-line"></div>
@@ -490,6 +497,7 @@
         <button class="slider-btn prev" id="slideLeft">&lsaquo;</button>
         
         <div class="slider-container" id="slider">          
+          <!-- CARD 1: Rander -->
           <div class="shame-card" 
                data-title="Rander - 6b8t's owner" 
                data-desc="Ignoring questions??? Am i talking to a wall or a person dude" 
@@ -501,7 +509,8 @@
               <p>Ignoring questions??? Am i talking to a wall or a person dude</p>
             </div>
           </div>
-          
+
+          <!-- CARD 2: Psycho -->
           <div class="shame-card" 
                data-title="Psycho - The second 6b8t owner" 
                data-desc="Muting me for NO reason?? i wasnt even rude i only said shut up because of bob guy is annoying" 
@@ -513,6 +522,7 @@
             </div>
           </div>
 
+          <!-- CARD 3: 2rx -->
           <div class="shame-card" 
                data-title="2rx - Previous admin abuse owner" 
                data-desc="spreading misinformation without any proof thats randers face LOL" 
@@ -524,6 +534,7 @@
             </div>
           </div>
 
+          <!-- CARD 4: Psycho (yet again) -->
           <div class="shame-card" 
                data-title="Psycho (yet again) - The second 6b8t owner" 
                data-desc="again admin abusing for telling them to shush up for a little because it was distracting" 
@@ -535,6 +546,7 @@
             </div>
           </div>
 
+          <!-- CARD 5: DRIFTER99 -->
           <div class="shame-card" 
                data-title="DRIFTER99 & GoatedGamer - One weird and one OG 6b8t member" 
                data-desc="Acting like a weirdo and goatedgamer pretending to be an ai :skull:" 
@@ -546,6 +558,7 @@
             </div>
           </div>
 
+          <!-- CARD 6: DRIFTER99 again -->
           <div class="shame-card" 
                data-title="DRIFTER99 again - Weird 6b8t member" 
                data-desc="Acting like a pdf... wtf" 
@@ -558,6 +571,7 @@
             </div>
           </div>
 
+          <!-- CARD 7: Kuma Bean -->
           <div class="shame-card" 
                data-title="Kuma Bean - An OG 6b8t member" 
                data-desc="xd" 
@@ -568,6 +582,19 @@
               <p>xd</p>
             </div>
           </div>
+
+          <!-- CARD 8: Drifter99 (again) -->
+          <div class="shame-card" 
+               data-title="Drifter99 - Weird 6b8t member" 
+               data-desc="Acting like a pdf... wtf" 
+               data-img="https://media.discordapp.net/attachments/1472193755535769713/1495555070769500261/Screenshot_2026-04-20-00-44-09-135_com.discord.png?ex=69e6abb2&is=69e55a32&hm=3dee94d4e9cf977190318fbb50c3df92f6881fb3e8f2bd0980570177e38706b8&=&format=webp&quality=lossless">
+            <img src="https://media.discordapp.net/attachments/1472193755535769713/1495555070769500261/Screenshot_2026-04-20-00-44-09-135_com.discord.png?ex=69e6abb2&is=69e55a32&hm=3dee94d4e9cf977190318fbb50c3df92f6881fb3e8f2bd0980570177e38706b8&=&format=webp&quality=lossless" alt="Drifter99" class="shame-img">
+            <div class="shame-content">
+              <h4>Drifter99 - Weird 6b8t member</h4>
+              <p>Acting like a pdf... wtf</p>
+            </div>
+          </div>
+        </div>
 
         </div>
 
@@ -716,6 +743,7 @@
         resize();
         animate();
 
+        // --- Slider Logic ---
         const slider = document.getElementById('slider');
         const leftBtn = document.getElementById('slideLeft');
         const rightBtn = document.getElementById('slide-right');
@@ -762,6 +790,7 @@
             if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
         });
 
+        // MAGNETIC LOGIC REMOVED - No global mousemove listeners for buttons
     });
   </script>
 </body>
