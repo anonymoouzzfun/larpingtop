@@ -6,7 +6,9 @@
 <title>the LARPing website</title>
 <meta name="description" content="theres no limit to the LARP"/>
 <meta name="url" content="https://larping.top/"/>
-<link rel="icon" href="favicon.ico" type="image/x-icon" />
+<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="shortcut icon" href="/favicon.ico" />
 
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="the LARPing website"/>
@@ -17,7 +19,7 @@
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="the LARPing website"/>
-<meta name="twitter:description" content="theres no limit to the LARP"/>
+<meta name="twitter:description" content="there's no limit to the LARP."/>
 <meta name="twitter:image" content="https://larping.top/larp-flight.png"/>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -28,6 +30,7 @@
     background: #050505;
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-family: 'Inter', sans-serif;
@@ -70,6 +73,12 @@
     position: relative;
     cursor: pointer;
     transition: color 0.3s ease, text-shadow 0.3s ease;
+    text-shadow:
+      0 0 4px rgba(96, 165, 250, 0.6),
+      0 0 12px rgba(96, 165, 250, 0.45),
+      0 0 28px rgba(96, 165, 250, 0.3),
+      0 0 56px rgba(96, 165, 250, 0.18),
+      0 0 90px rgba(96, 165, 250, 0.08);
   }
 
   .larp-link::after {
@@ -85,11 +94,34 @@
 
   .larp-link:hover {
     color: #93bbfc;
-    text-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+    text-shadow:
+      0 0 6px rgba(96, 165, 250, 0.8),
+      0 0 18px rgba(96, 165, 250, 0.6),
+      0 0 40px rgba(96, 165, 250, 0.4),
+      0 0 80px rgba(96, 165, 250, 0.25),
+      0 0 120px rgba(96, 165, 250, 0.12);
   }
 
   .larp-link:hover::after {
     width: 100%;
+  }
+
+  .contact-link {
+    position: fixed;
+    bottom: 1.25rem;
+    left: 50%;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: rgba(163, 163, 163, 0.45);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: color 0.3s ease;
+    opacity: 0;
+    animation: emerge-contact 2s cubic-bezier(0, 0, 0.2, 1) forwards;
+  }
+
+  .contact-link:hover {
+    color: rgba(163, 163, 163, 0.7);
   }
 
   @keyframes emerge {
@@ -104,6 +136,22 @@
     100% {
       opacity: 1;
       transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes emerge-contact {
+    0% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(6px);
+      filter: blur(4px);
+    }
+    40% {
+      filter: blur(1px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
       filter: blur(0);
     }
   }
@@ -128,6 +176,10 @@
 </head>
 <body>
 
+  <audio id="bg-music" loop autoplay>
+    <source src="BESTLARPMUSIC.mp3" type="audio/mpeg">
+  </audio>
+
   <div class="text-container">
     <div class="line">
       <a class="larp-link" href="https://larping.top/larp-flight.png">LARP</a>ing?
@@ -135,7 +187,15 @@
     <div class="line">i dont know whats that...</div>
   </div>
 
+  <a class="contact-link" href="https://mail.google.com/mail/?view=cm&fs=1&to=mrex@larping.top">Contact ME! :3</a>
+
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const audio = document.getElementById('bg-music');
+        audio.volume = 0.5;
+        audio.play().catch(error => {});
+    });
+
     for (let i = 0; i < 20; i++) {
       const dust = document.createElement('div');
       dust.className = 'dust';
