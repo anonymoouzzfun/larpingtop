@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>the LARPing website</title>
+<meta name="description" content="theres no limit to the LARP"/>
+<meta name="url" content="https://larping.top/"/>
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="the LARPing website"/>
+<meta property="og:description" content="theres no limit to the LARP"/>
+<meta property="og:url" content="https://larping.top/"/>
+<meta property="og:image" content="https://larping.top/og.png"/>
+<meta property="og:site_name" content="the LARPing website"/>
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="the LARPing website"/>
+<meta name="twitter:description" content="theres no limit to the LARP"/>
+<meta name="twitter:image" content="https://larping.top/og.png"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #050505;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 600px 300px at 50% 50%, rgba(37, 99, 235, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .text-container {
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .line {
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: #e5e5e5;
+    letter-spacing: -0.01em;
+    line-height: 1.8;
+    opacity: 0;
+    transform: translateY(6px);
+    animation: emerge 2.5s cubic-bezier(0, 0, 0.2, 1) forwards;
+    text-shadow: 0 0 60px rgba(255,255,255,0.03);
+  }
+
+  .line:nth-child(2) {
+    animation-delay: 1.6s;
+  }
+
+  .larp-link {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 400;
+    position: relative;
+    cursor: pointer;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+  }
+
+  .larp-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #60a5fa;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .larp-link:hover {
+    color: #93bbfc;
+    text-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+  }
+
+  .larp-link:hover::after {
+    width: 100%;
+  }
+
+  @keyframes emerge {
+    0% {
+      opacity: 0;
+      transform: translateY(6px);
+      filter: blur(4px);
+    }
+    40% {
+      filter: blur(1px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  .dust {
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: drift linear infinite;
+  }
+
+  @keyframes drift {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="text-container">
+    <div class="line">
+      <a class="larp-link" href="https://arabs-for.sale/bomb-included/0kE9O">LARP</a>ing?
+    </div>
+    <div class="line">i dont know whats that...</div>
+  </div>
+
+  <script>
+    for (let i = 0; i < 20; i++) {
+      const dust = document.createElement('div');
+      dust.className = 'dust';
+      dust.style.left = Math.random() * 100 + 'vw';
+      dust.style.top = (60 + Math.random() * 40) + 'vh';
+      dust.style.animationDuration = (12 + Math.random() * 20) + 's';
+      dust.style.animationDelay = (Math.random() * 15) + 's';
+      dust.style.width = dust.style.height = (0.5 + Math.random() * 1) + 'px';
+      document.body.appendChild(dust);
+    }
+  </script>
+
+</body>
+</html>
