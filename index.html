@@ -35,6 +35,7 @@
     justify-content: center;
     font-family: 'Inter', sans-serif;
     overflow: hidden;
+    cursor: pointer;
   }
 
   body::before {
@@ -190,13 +191,28 @@
   <a class="contact-link" href="https://mail.google.com/mail/?view=cm&fs=1&to=mrex@larping.top">Contact ME! :3</a>
 
   <script>
+    const audio = document.getElementById('bg-music');
+    let hasInteracted = false;
+
+    function startMusic() {
+      if (hasInteracted) return;
+      hasInteracted = true;
+      audio.muted = false;
+      audio.volume = 0.5;
+      audio.play().catch(() => {});
+    }
+
+    // Try muted autoplay first (allowed by browsers)
     document.addEventListener('DOMContentLoaded', () => {
-        const audio = document.getElementById('bg-music');
-        if (audio) {
-          audio.volume = 0.5;
-          audio.play();
-        }
+      if (audio) {
+        audio.volume = 0.5;
+        audio.play().catch(() => {});
+      }
     });
+
+    document.addEventListener('click', startMusic);
+    document.addEventListener('touchstart', startMusic);
+    document.addEventListener('keydown', startMusic);
 
     for (let i = 0; i < 20; i++) {
       const dust = document.createElement('div');
