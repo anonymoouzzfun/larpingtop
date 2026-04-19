@@ -1,2 +1,2 @@
 # larpingtop
-Hosted by XYZServer
+im not a larper trust..
