@@ -156,7 +156,7 @@
 </head>
 <body>
 
-  <audio id="bg-music" loop muted>
+  <audio id="bg-music" loop>
     <source src="./BESTLARPMUSIC.mp3" type="audio/mpeg">
   </audio>
 
@@ -173,7 +173,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         const audio = document.getElementById('bg-music');
         if (audio) {
-          audio.volume = 0.5;
+          audio.volume = 1.0;
           audio.play();
         }
     });
