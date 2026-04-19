@@ -569,84 +569,74 @@
     </div>
   </div>
 
-  <script>
+ <script>
     document.addEventListener('DOMContentLoaded', () => {
-        
+       
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
-        
+       
         let width, height;
         let particles = [];
-        
+       
         const config = {
             particleCount: window.innerWidth < 600 ? 50 : 90,
             connectionDistance: 120,
-            mouseRepelDist: 80, 
+            mouseRepelDist: 80,
             mouseForce: 4,
             baseSpeed: 0.3
         };
-
         let mouse = { x: null, y: null };
-
         window.addEventListener('mousemove', (e) => {
             mouse.x = e.x;
             mouse.y = e.y;
         });
-        
+       
         window.addEventListener('mouseout', () => {
             mouse.x = null;
             mouse.y = null;
         });
-
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             initParticles();
         }
-
         class Particle {
             constructor() {
                 this.reset(true);
             }
-
             reset(randomY = false) {
                 this.x = Math.random() * width;
                 this.y = randomY ? Math.random() * height : Math.random() * height;
                 this.size = Math.random() * 1.5 + 0.5;
-                
+               
                 this.vx = (Math.random() - 0.5) * config.baseSpeed;
                 this.vy = (Math.random() - 0.5) * config.baseSpeed;
-                
-                this.opacity = Math.random() * 0.4 + 0.2; 
-
-                this.hue = 180 + Math.random() * 40; 
+               
+                this.opacity = Math.random() * 0.4 + 0.2;
+                this.hue = 180 + Math.random() * 40;
             }
-
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-
                 if (mouse.x != null) {
                     let dx = mouse.x - this.x;
                     let dy = mouse.y - this.y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
-                    
+                   
                     if (distance < config.mouseRepelDist) {
                         const force = (config.mouseRepelDist - distance) / config.mouseRepelDist;
                         const directionX = (dx / distance) * force * config.mouseForce;
                         const directionY = (dy / distance) * force * config.mouseForce;
-                        
+                       
                         this.x -= directionX;
                         this.y -= directionY;
                     }
                 }
-
                 if (this.x < 0) this.x = width;
                 if (this.x > width) this.x = 0;
                 if (this.y < 0) this.y = height;
                 if (this.y > height) this.y = 0;
             }
-
             draw() {
                 ctx.fillStyle = `hsla(${this.hue}, 90%, 60%, ${this.opacity})`;
                 ctx.beginPath();
@@ -655,28 +645,24 @@
                 ctx.fill();
             }
         }
-
         function initParticles() {
             particles = [];
             for (let i = 0; i < config.particleCount; i++) {
                 particles.push(new Particle());
             }
         }
-
         function animate() {
             if (!canvas) return;
-
             ctx.clearRect(0, 0, width, height);
-            
+           
             for (let a = 0; a < particles.length; a++) {
                 for (let b = a; b < particles.length; b++) {
                     let dx = particles[a].x - particles[b].x;
                     let dy = particles[a].y - particles[b].y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
-
                     if (distance < config.connectionDistance) {
                         let opacity = 1 - (distance / config.connectionDistance);
-                        ctx.strokeStyle = `hsla(190, 80%, 60%, ${opacity * 0.15})`; 
+                        ctx.strokeStyle = `hsla(190, 80%, 60%, ${opacity * 0.15})`;
                         ctx.lineWidth = 1;
                         ctx.beginPath();
                         ctx.moveTo(particles[a].x, particles[a].y);
@@ -685,18 +671,17 @@
                     }
                 }
             }
-
             for (let i = 0; i < particles.length; i++) {
                 particles[i].update();
                 particles[i].draw();
             }
             requestAnimationFrame(animate);
         }
-
         window.addEventListener('resize', resize);
         resize();
         animate();
 
+        // Updated slider logic - moves ONE card at a time
         const slider = document.getElementById('slider');
         const leftBtn = document.getElementById('slideLeft');
         const rightBtn = document.getElementById('slideRight');
@@ -704,15 +689,13 @@
 
         function updateArrows() {
             const isAtStart = Math.abs(slider.scrollLeft) < 5;
-            
             const isAtEnd = Math.abs(slider.scrollLeft + slider.clientWidth - slider.scrollWidth) < 5;
-
+            
             if (isAtStart) {
                 leftBtn.classList.add('hidden');
             } else {
                 leftBtn.classList.remove('hidden');
             }
-
             if (isAtEnd) {
                 rightBtn.classList.add('hidden');
             } else {
@@ -722,18 +705,22 @@
 
         slider.addEventListener('scroll', updateArrows);
 
+        // NEW: Move exactly one card left
         leftBtn.addEventListener('click', () => {
-            const target = cards[0];
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-            }
+            const cardWidth = cards[0] ? cards[0].offsetWidth + 24 : 300; // 300px card + 1.5rem gap (24px)
+            slider.scrollBy({
+                left: -cardWidth,
+                behavior: 'smooth'
+            });
         });
 
+        // NEW: Move exactly one card right
         rightBtn.addEventListener('click', () => {
-            const target = cards[cards.length - 1];
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-            }
+            const cardWidth = cards[0] ? cards[0].offsetWidth + 24 : 300;
+            slider.scrollBy({
+                left: cardWidth,
+                behavior: 'smooth'
+            });
         });
 
         setTimeout(updateArrows, 100);
@@ -743,17 +730,14 @@
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
+               
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-
-                const rotateX = ((y - centerY) / centerY) * -10; 
+                const rotateX = ((y - centerY) / centerY) * -10;
                 const rotateY = ((x - centerX) / centerX) * 10;
-
                 card.style.setProperty('--rx', `${rotateX}deg`);
                 card.style.setProperty('--ry', `${rotateY}deg`);
             });
-
             card.addEventListener('mouseleave', () => {
                 card.style.setProperty('--rx', '0deg');
                 card.style.setProperty('--ry', '0deg');
@@ -765,25 +749,20 @@
         const modalTitle = document.getElementById('modal-title');
         const modalDesc = document.getElementById('modal-desc');
         const closeBtn = document.querySelector('.close-modal');
-
         cards.forEach(card => {
             card.addEventListener('click', () => {
                 const title = card.getAttribute('data-title');
                 const desc = card.getAttribute('data-desc');
                 const imgSrc = card.getAttribute('data-img');
-
                 modalTitle.textContent = title;
                 modalDesc.textContent = desc;
                 modalImg.src = imgSrc;
-
                 modal.classList.add('active');
             });
         });
-
         function closeModal() {
             modal.classList.remove('active');
         }
-
         closeBtn.addEventListener('click', closeModal);
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
@@ -793,5 +772,3 @@
         });
     });
   </script>
-</body>
-</html>
