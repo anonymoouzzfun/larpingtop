@@ -35,7 +35,7 @@
     justify-content: center;
     font-family: 'Inter', sans-serif;
     overflow: hidden;
-    cursor: pointer;
+    cursor: pointer; /* makes it obvious you can click */
   }
 
   body::before {
@@ -126,35 +126,15 @@
   }
 
   @keyframes emerge {
-    0% {
-      opacity: 0;
-      transform: translateY(6px);
-      filter: blur(4px);
-    }
-    40% {
-      filter: blur(1px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-      filter: blur(0);
-    }
+    0% { opacity: 0; transform: translateY(6px); filter: blur(4px); }
+    40% { filter: blur(1px); }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0); }
   }
 
   @keyframes emerge-contact {
-    0% {
-      opacity: 0;
-      transform: translateX(-50%) translateY(6px);
-      filter: blur(4px);
-    }
-    40% {
-      filter: blur(1px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-      filter: blur(0);
-    }
+    0% { opacity: 0; transform: translateX(-50%) translateY(6px); filter: blur(4px); }
+    40% { filter: blur(1px); }
+    100% { opacity: 1; transform: translateX(-50%) translateY(0); filter: blur(0); }
   }
 
   .dust {
@@ -192,27 +172,25 @@
 
   <script>
     const audio = document.getElementById('bg-music');
-    let hasInteracted = false;
+    let hasStarted = false;
 
-    function startMusic() {
-      if (hasInteracted) return;
-      hasInteracted = true;
-      audio.muted = false;
+    function tryAutoplay() {
       audio.volume = 0.5;
       audio.play().catch(() => {});
     }
 
-    // Try muted autoplay first (allowed by browsers)
-    document.addEventListener('DOMContentLoaded', () => {
-      if (audio) {
-        audio.volume = 0.5;
-        audio.play().catch(() => {});
-      }
-    });
+    function unlockAudio() {
+      if (hasStarted) return;
+      hasStarted = true;
+      audio.muted = false;
+      audio.play().catch(() => {});
+    }
 
-    document.addEventListener('click', startMusic);
-    document.addEventListener('touchstart', startMusic);
-    document.addEventListener('keydown', startMusic);
+    document.addEventListener('DOMContentLoaded', tryAutoplay);
+
+    document.addEventListener('click', unlockAudio);
+    document.addEventListener('touchstart', unlockAudio);
+    document.addEventListener('keydown', unlockAudio);
 
     for (let i = 0; i < 20; i++) {
       const dust = document.createElement('div');
