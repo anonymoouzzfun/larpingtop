@@ -221,10 +221,11 @@
     overflow-x: auto;
     gap: 1.5rem;
     scroll-snap-type: x mandatory;
-    padding: 20px 0;
+    scroll-snap-stop: always;
+    padding: 20px calc(50% - 150px);
     width: 100%;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; 
+    scrollbar-width: none;
   }
   
   .slider-container::-webkit-scrollbar {
@@ -251,6 +252,7 @@
     flex-direction: column;
     cursor: pointer;
     scroll-snap-align: center;
+    scroll-snap-stop: always;
   }
 
   .shame-card:hover {
@@ -541,6 +543,39 @@
             </div>
           </div>
 
+          <div class="shame-card"
+               data-title="DRIFTER99 & GoatedGamer - One weird and one OG 6b8t member"
+               data-desc="Drifter99 acting like a weirdo and goatedgamer pretending to be an ai :skull:"
+               data-img="https://media.discordapp.net/attachments/1472193755535769713/1495555070769500261/Screenshot_2026-04-20-00-41-36-562_com.discord.png?ex=69e6abb2&is=69e55a32&hm=95a80a171ead9137a591eee7a52d4b9d61813ecd089d77c4c04e3d5cc7f60154&=&format=webp&quality=lossless">
+            <img src="https://media.discordapp.net/attachments/1472193755535769713/1495555070769500261/Screenshot_2026-04-20-00-41-36-562_com.discord.png?ex=69e6abb2&is=69e55a32&hm=95a80a171ead9137a591eee7a52d4b9d61813ecd089d77c4c04e3d5cc7f60154&=&format=webp&quality=lossless" alt="DRIFTER99 & GoatedGamer" class="shame-img">
+            <div class="shame-content">
+              <h4>DRIFTER99 & GoatedGamer - One weird and one OG 6b8t member</h4>
+              <p>Drifter99 acting like a weirdo and goatedgamer pretending to be an ai :skull:</p>
+            </div>
+          </div>
+
+          <div class="shame-card"
+               data-title="DRIFTER99 again - Weird 6b8t member"
+               data-desc="Acting like a pdf... wtf"
+               data-img="https://media.discordapp.net/attachments/1472193755535769713/1495555670194389122/Screenshot_2026-04-20-00-44-09-135_com.discord.png?ex=69e6ac41&is=69e55ac1&hm=3dee94d4e9cf977190318fbb50c3df92f6881fb3e8f2bd0980570177e38706b8&=&format=webp&quality=lossless&width=550&height=124">
+            <img src="https://media.discordapp.net/attachments/1472193755535769713/1495555670194389122/Screenshot_2026-04-20-00-44-09-135_com.discord.png?ex=69e6ac41&is=69e55ac1&hm=3dee94d4e9cf977190318fbb50c3df92f6881fb3e8f2bd0980570177e38706b8&=&format=webp&quality=lossless&width=550&height=124" alt="DRIFTER99 again" class="shame-img">
+            <div class="shame-content">
+              <h4>DRIFTER99 again - Weird 6b8t member</h4>
+              <p>Acting like a pdf... wtf</p>
+            </div>
+          </div>
+
+          <div class="shame-card"
+               data-title="Kuma Bean - An OG 6b8t member"
+               data-desc="xd"
+               data-img="https://media.discordapp.net/attachments/1472193755535769713/1495555071583457372/Screenshot_2026-04-20-00-40-29-207_com.discord.png?ex=69e6abb3&is=69e55a33&hm=0d8e82b8a202e005ad5b655928632f5da152fb7c9bd2843942b34bbaff8ac85f&=&format=webp&quality=lossless">
+            <img src="https://media.discordapp.net/attachments/1472193755535769713/1495555071583457372/Screenshot_2026-04-20-00-40-29-207_com.discord.png?ex=69e6abb3&is=69e55a33&hm=0d8e82b8a202e005ad5b655928632f5da152fb7c9bd2843942b34bbaff8ac85f&=&format=webp&quality=lossless" alt="Kuma Bean" class="shame-img">
+            <div class="shame-content">
+              <h4>Kuma Bean - An OG 6b8t member</h4>
+              <p>xd</p>
+            </div>
+          </div>
+
           <div class="shame-card" 
                data-title="P0E_EE - An OG user of 6b8t" 
                data-desc="..." 
@@ -571,7 +606,6 @@
 
  <script>
     document.addEventListener('DOMContentLoaded', () => {
-       
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
        
@@ -579,13 +613,15 @@
         let particles = [];
        
         const config = {
-            particleCount: window.innerWidth < 600 ? 50 : 90,
-            connectionDistance: 120,
-            mouseRepelDist: 80,
-            mouseForce: 4,
-            baseSpeed: 0.3
+            particleCount: window.innerWidth < 600 ? 40 : 70,
+            connectionDistance: 110,
+            mouseRepelDist: 90,
+            mouseForce: 3,
+            baseSpeed: 0.25
         };
+
         let mouse = { x: null, y: null };
+
         window.addEventListener('mousemove', (e) => {
             mouse.x = e.x;
             mouse.y = e.y;
@@ -595,11 +631,13 @@
             mouse.x = null;
             mouse.y = null;
         });
+
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             initParticles();
         }
+
         class Particle {
             constructor() {
                 this.reset(true);
@@ -607,63 +645,64 @@
             reset(randomY = false) {
                 this.x = Math.random() * width;
                 this.y = randomY ? Math.random() * height : Math.random() * height;
-                this.size = Math.random() * 1.5 + 0.5;
-               
-                this.vx = (Math.random() - 0.5) * config.baseSpeed;
-                this.vy = (Math.random() - 0.5) * config.baseSpeed;
-               
-                this.opacity = Math.random() * 0.4 + 0.2;
-                this.hue = 180 + Math.random() * 40;
+                this.size = Math.random() * 1.2 + 0.6;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = config.baseSpeed * (0.6 + Math.random() * 0.8);
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.opacity = Math.random() * 0.35 + 0.15;
+                this.hue = 185 + Math.random() * 20;
             }
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
+
                 if (mouse.x != null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
                    
-                    if (distance < config.mouseRepelDist) {
+                    if (distance < config.mouseRepelDist && distance > 0) {
                         const force = (config.mouseRepelDist - distance) / config.mouseRepelDist;
-                        const directionX = (dx / distance) * force * config.mouseForce;
-                        const directionY = (dy / distance) * force * config.mouseForce;
-                       
-                        this.x -= directionX;
-                        this.y -= directionY;
+                        this.x -= (dx / distance) * force * config.mouseForce;
+                        this.y -= (dy / distance) * force * config.mouseForce;
                     }
                 }
+
                 if (this.x < 0) this.x = width;
                 if (this.x > width) this.x = 0;
                 if (this.y < 0) this.y = height;
                 if (this.y > height) this.y = 0;
             }
             draw() {
-                ctx.fillStyle = `hsla(${this.hue}, 90%, 60%, ${this.opacity})`;
+                ctx.fillStyle = `hsla(${this.hue}, 85%, 62%, ${this.opacity})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.closePath();
                 ctx.fill();
             }
         }
+
         function initParticles() {
             particles = [];
             for (let i = 0; i < config.particleCount; i++) {
                 particles.push(new Particle());
             }
         }
+
         function animate() {
             if (!canvas) return;
             ctx.clearRect(0, 0, width, height);
            
             for (let a = 0; a < particles.length; a++) {
-                for (let b = a; b < particles.length; b++) {
-                    let dx = particles[a].x - particles[b].x;
-                    let dy = particles[a].y - particles[b].y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
+                for (let b = a + 1; b < particles.length; b++) {
+                    const dx = particles[a].x - particles[b].x;
+                    const dy = particles[a].y - particles[b].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
                     if (distance < config.connectionDistance) {
-                        let opacity = 1 - (distance / config.connectionDistance);
-                        ctx.strokeStyle = `hsla(190, 80%, 60%, ${opacity * 0.15})`;
-                        ctx.lineWidth = 1;
+                        const opacity = (1 - (distance / config.connectionDistance)) * 0.12;
+                        ctx.strokeStyle = `hsla(190, 80%, 65%, ${opacity})`;
+                        ctx.lineWidth = 0.8;
                         ctx.beginPath();
                         ctx.moveTo(particles[a].x, particles[a].y);
                         ctx.lineTo(particles[b].x, particles[b].y);
@@ -671,56 +710,74 @@
                     }
                 }
             }
+
             for (let i = 0; i < particles.length; i++) {
                 particles[i].update();
                 particles[i].draw();
             }
+
             requestAnimationFrame(animate);
         }
+
         window.addEventListener('resize', resize);
         resize();
         animate();
 
-        // Updated slider logic - moves ONE card at a time
         const slider = document.getElementById('slider');
         const leftBtn = document.getElementById('slideLeft');
         const rightBtn = document.getElementById('slideRight');
         const cards = document.querySelectorAll('.shame-card');
 
-        function updateArrows() {
-            const isAtStart = Math.abs(slider.scrollLeft) < 5;
-            const isAtEnd = Math.abs(slider.scrollLeft + slider.clientWidth - slider.scrollWidth) < 5;
-            
-            if (isAtStart) {
-                leftBtn.classList.add('hidden');
-            } else {
-                leftBtn.classList.remove('hidden');
-            }
-            if (isAtEnd) {
-                rightBtn.classList.add('hidden');
-            } else {
-                rightBtn.classList.remove('hidden');
-            }
+        let currentIndex = 0;
+        let isProgrammaticScroll = false;
+        let scrollEndTimer = null;
+
+        function scrollToCard(index) {
+            const card = cards[index];
+            if (!card) return;
+            isProgrammaticScroll = true;
+            clearTimeout(scrollEndTimer);
+            const offset = card.offsetLeft - (slider.clientWidth / 2) + (card.offsetWidth / 2);
+            slider.scrollTo({ left: offset, behavior: 'smooth' });
+            scrollEndTimer = setTimeout(() => {
+                isProgrammaticScroll = false;
+            }, 450);
         }
 
-        slider.addEventListener('scroll', updateArrows);
+        function updateArrows() {
+            leftBtn.classList.toggle('hidden', currentIndex === 0);
+            rightBtn.classList.toggle('hidden', currentIndex === cards.length - 1);
+        }
 
-        // NEW: Move exactly one card left
         leftBtn.addEventListener('click', () => {
-            const cardWidth = cards[0] ? cards[0].offsetWidth + 24 : 300; // 300px card + 1.5rem gap (24px)
-            slider.scrollBy({
-                left: -cardWidth,
-                behavior: 'smooth'
-            });
+            if (currentIndex > 0) {
+                currentIndex--;
+                scrollToCard(currentIndex);
+                updateArrows();
+            }
         });
 
-        // NEW: Move exactly one card right
         rightBtn.addEventListener('click', () => {
-            const cardWidth = cards[0] ? cards[0].offsetWidth + 24 : 300;
-            slider.scrollBy({
-                left: cardWidth,
-                behavior: 'smooth'
+            if (currentIndex < cards.length - 1) {
+                currentIndex++;
+                scrollToCard(currentIndex);
+                updateArrows();
+            }
+        });
+
+        slider.addEventListener('scroll', () => {
+            if (isProgrammaticScroll) return;
+            let closest = 0;
+            let closestDist = Infinity;
+            cards.forEach((card, i) => {
+                const dist = Math.abs(card.getBoundingClientRect().left - slider.getBoundingClientRect().left);
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closest = i;
+                }
             });
+            currentIndex = closest;
+            updateArrows();
         });
 
         setTimeout(updateArrows, 100);
@@ -730,11 +787,8 @@
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-               
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -10;
-                const rotateY = ((x - centerX) / centerX) * 10;
+                const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -10;
+                const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 10;
                 card.style.setProperty('--rx', `${rotateX}deg`);
                 card.style.setProperty('--ry', `${rotateY}deg`);
             });
@@ -749,20 +803,20 @@
         const modalTitle = document.getElementById('modal-title');
         const modalDesc = document.getElementById('modal-desc');
         const closeBtn = document.querySelector('.close-modal');
+
         cards.forEach(card => {
             card.addEventListener('click', () => {
-                const title = card.getAttribute('data-title');
-                const desc = card.getAttribute('data-desc');
-                const imgSrc = card.getAttribute('data-img');
-                modalTitle.textContent = title;
-                modalDesc.textContent = desc;
-                modalImg.src = imgSrc;
+                modalTitle.textContent = card.getAttribute('data-title');
+                modalDesc.textContent = card.getAttribute('data-desc');
+                modalImg.src = card.getAttribute('data-img');
                 modal.classList.add('active');
             });
         });
+
         function closeModal() {
             modal.classList.remove('active');
         }
+
         closeBtn.addEventListener('click', closeModal);
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
@@ -772,3 +826,5 @@
         });
     });
   </script>
+</body>
+</html>
