@@ -9,7 +9,7 @@
 <meta property="og:title" content="the LARPing website"/>
 <meta property="og:description" content="there's no limit to the LARP."/>
 <meta property="og:url" content="https://larping.top/"/>
-<meta property="og:image" content="https://larping.top/larp-flight.png"/>
+<meta property="og:image" content="https://larping.top/we%20love%20you%20benjamin.jpg"/>
 <meta property="og:site_name" content="the LARPing website"/>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -104,7 +104,7 @@
     letter-spacing: -0.03em;
     margin-bottom: 1rem;
     text-shadow: 0 10px 40px rgba(0,0,0,0.8);
-    animation: fadeInDown 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    opacity: 0;
   }
 
   .hero-sub {
@@ -113,7 +113,6 @@
     font-weight: 400;
     letter-spacing: -0.01em;
     opacity: 0;
-    animation: fadeIn 1s ease-out 0.8s forwards;
   }
 
   .larp-link {
@@ -152,7 +151,6 @@
     margin-bottom: 1.5rem;
     position: relative;
     opacity: 0;
-    animation: slideUp 1s ease-out 1.2s forwards;
   }
 
   .shame-header {
@@ -301,12 +299,11 @@
 
   .footer {
     z-index: 20;
-    margin-bottom: 3rem; 
+    margin-bottom: 3rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     opacity: 0;
-    animation: fadeIn 1s ease-out 2s forwards;
   }
 
   .footer-btn {
@@ -462,7 +459,38 @@
 </head>
 <body>
 
-  <div class="ambient-glow"></div>
+  <div id="intro-screen" style="
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.8s ease;
+  ">
+    <span style="
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.25em;
+      color: rgba(255,255,255,0.9);
+      user-select: none;
+    ">[ click to enter ]</span>
+  </div>
+
+  <audio id="bg-music" src="https://larping.top/BESTLARPMUSIC.mp3" loop preload="auto"></audio>
+
+  <style>
+    @keyframes introPulse {
+      0%, 100% { opacity: 0.35; }
+      50% { opacity: 0.7; }
+    }
+    .hero-title.revealed { animation: fadeInDown 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+    .hero-sub.revealed { animation: fadeIn 1s ease-out 0.8s forwards; }
+    .shame-section.revealed { animation: slideUp 1s ease-out 1.2s forwards; }
+    .footer.revealed { animation: fadeIn 1s ease-out 2s forwards; }
+  </style>
   <div class="noise-overlay"></div>
   <canvas id="particle-canvas"></canvas>
 
@@ -494,7 +522,7 @@
         <div class="shame-line"></div>
       </div>
 
-      <div style="display:flex; justify-content:center; margin-bottom:2rem;">
+      <div style="display:flex; justify-content:center; margin-bottom:0.75rem;">
         <img src="https://larping.top/worse%20then%20a%20larp.png" alt="worse than a larp" style="max-width:180px; width:100%; border-radius:10px; border:1px solid rgba(255,255,255,0.08); box-shadow:0 8px 32px rgba(0,0,0,0.5); opacity:0.9;">
       </div>
 
@@ -621,6 +649,22 @@
 
  <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const intro = document.getElementById('intro-screen');
+        const music = document.getElementById('bg-music');
+
+        intro.addEventListener('click', () => {
+            music.volume = 0.4;
+            music.play();
+            intro.style.opacity = '0';
+            intro.style.pointerEvents = 'none';
+            setTimeout(() => intro.remove(), 800);
+
+            document.querySelector('.hero-title').classList.add('revealed');
+            document.querySelector('.hero-sub').classList.add('revealed');
+            document.querySelector('.shame-section').classList.add('revealed');
+            document.querySelector('.footer').classList.add('revealed');
+        });
+
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
        
