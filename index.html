@@ -158,7 +158,7 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1rem;
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.2em;
@@ -479,7 +479,7 @@
     ">[ click to enter ]</span>
   </div>
 
-  <audio id="bg-music" src="https://larping.top/welovethis.mp3" loop preload="auto"></audio>
+  <audio id="bg-music" src="https://larping.top/BESTLARPMUSIC.mp3" loop preload="auto"></audio>
 
   <style>
     @keyframes introPulse {
@@ -508,7 +508,7 @@
   <div class="container">
     <div class="hero">
       <div class="hero-title">
-        <a class="larp-link" id="larp-link" href="https://larping.top/larp-flight.png" target="_blank">LARP</a>ing?
+        <a class="larp-link" id="larp-link" href="#" target="_blank">LARP</a>ing?
       </div>
       <div class="hero-sub">
         i dont know whats that...
@@ -520,10 +520,6 @@
         <div class="shame-line"></div>
         <span>Hall of Shame</span>
         <div class="shame-line"></div>
-      </div>
-
-      <div style="display:flex; justify-content:center; margin-bottom:0.75rem;">
-        <img src="https://larping.top/betterthenalarp.png" alt="worsethanalarp" style="max-width:180px; width:100%; border-radius:10px; border:1px solid rgba(255,255,255,0.08); box-shadow:0 8px 32px rgba(0,0,0,0.5); opacity:0.9;">
       </div>
 
       <div class="slider-wrapper">
@@ -610,12 +606,12 @@
 
           <div class="shame-card"
                data-title="Anony - The guy no one liked"
-               data-desc="a sweet guy"
+               data-desc="An autistic guy who also made a kiddo twerk on camera (said by the victim's friend"
                data-img="https://media.discordapp.net/attachments/1495478046897995898/1495643626339041371/anonypedo1.png?ex=69e6fe2c&is=69e5acac&hm=0fad19ad8f63bc4549e7a40b270fb34ad2540b880ccd17268267526ec3a89d1d&=&format=webp&quality=lossless">
             <img src="https://media.discordapp.net/attachments/1495478046897995898/1495643626339041371/anonypedo1.png?ex=69e6fe2c&is=69e5acac&hm=0fad19ad8f63bc4549e7a40b270fb34ad2540b880ccd17268267526ec3a89d1d&=&format=webp&quality=lossless" alt="Anony" class="shame-img">
             <div class="shame-content">
               <h4>Anony - The guy no one liked</h4>
-              <p>a sweet guy</p>
+              <p>An autistic guy who also made a kiddo twerk on camera (said by the victim's friend</p>
             </div>
           </div>
 
@@ -645,6 +641,10 @@
         Join our Discord!
       </a>
     </div>
+
+    <div style="display:flex; justify-content:center; margin-top:1rem; margin-bottom:1.5rem;">
+      <img id="banner-img" src="https://larping.top/worse%20then%20a%20larp.png" alt="worse than a larp" style="max-width:380px; width:100%; border-radius:12px; border:1px solid rgba(255,255,255,0.08); box-shadow:0 8px 32px rgba(0,0,0,0.5); opacity:0.9; cursor:pointer;">
+    </div>
   </div>
 
  <script>
@@ -663,6 +663,18 @@
             document.querySelector('.hero-sub').classList.add('revealed');
             document.querySelector('.shame-section').classList.add('revealed');
             document.querySelector('.footer').classList.add('revealed');
+        });
+
+        document.getElementById('larp-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            const url = Math.random() < 0.05
+                ? 'https://www.youtube.com/watch?v=H91lNeuf0W4&t=34s'
+                : 'https://larping.top/larp-flight.png';
+            window.open(url, '_blank');
+        });
+
+        document.getElementById('banner-img').addEventListener('click', () => {
+            window.open('https://www.youtube.com/watch?v=TFyUl4nXc_4&t=17s', '_blank');
         });
 
         const canvas = document.getElementById('particle-canvas');
