@@ -24,6 +24,8 @@
     --accent-base: #22d3ee;
     --accent-glow: #67e8f9;
     --danger: #ef4444;
+    --fame-color: #f5c842;
+    --fame-glow: #ffe882;
     --card-bg: rgba(20, 20, 25, 0.6);
     --border-color: rgba(255, 255, 255, 0.1);
     --font-stack: 'Inter', sans-serif;
@@ -113,6 +115,19 @@
     font-weight: 400;
     letter-spacing: -0.01em;
     opacity: 0;
+    margin-bottom: 1.2rem;
+  }
+
+  /* small hero image */
+  .hero-img {
+    display: block;
+    margin: 0 auto;
+    max-width: 160px;
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+    opacity: 0;
   }
 
   .larp-link {
@@ -162,15 +177,123 @@
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    color: var(--danger);
-    opacity: 0.7;
+    color: rgba(255,255,255,0.35);
   }
 
   .shame-line {
     height: 1px;
     width: 50px;
-    background: rgba(239, 68, 68, 0.3);
+    background: rgba(255,255,255,0.12);
+    transition: background 0.5s ease, box-shadow 0.5s ease;
   }
+
+  .shame-header.shame-active .shame-line {
+    background: rgba(239, 68, 68, 0.45);
+    box-shadow: 0 0 6px rgba(239,68,68,0.2);
+  }
+
+  .shame-header.fame-active .shame-line {
+    background: rgba(245, 200, 66, 0.45);
+    box-shadow: 0 0 6px rgba(245,200,66,0.2);
+  }
+
+  /* "Hall of" prefix — always neutral */
+  .toggle-prefix {
+    color: rgba(255,255,255,0.3);
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    user-select: none;
+  }
+
+  /* the pill switcher container */
+  .toggle-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+    padding: 3px;
+    overflow: hidden;
+  }
+
+  /* sliding active pill */
+  .toggle-pill {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    border-radius: 999px;
+    transition: left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                background 0.4s ease,
+                box-shadow 0.4s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .toggle-pill.pill-shame {
+    background: rgba(239, 68, 68, 0.18);
+    box-shadow: 0 0 14px rgba(239,68,68,0.25), inset 0 0 8px rgba(239,68,68,0.08);
+  }
+
+  .toggle-pill.pill-fame {
+    background: rgba(245, 200, 66, 0.15);
+    box-shadow: 0 0 14px rgba(245,200,66,0.2), inset 0 0 8px rgba(245,200,66,0.06);
+  }
+
+  .toggle-shame, .toggle-fame {
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    user-select: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+  }
+
+  /* default inactive color */
+  .toggle-shame { color: rgba(255,255,255,0.3); }
+  .toggle-fame  { color: rgba(255,255,255,0.3); }
+
+  /* active states */
+  .shame-header.shame-active .toggle-shame {
+    color: #ef4444;
+    text-shadow: 0 0 10px rgba(239,68,68,0.55);
+  }
+  .shame-header.fame-active .toggle-fame {
+    color: var(--fame-color);
+    text-shadow: 0 0 10px rgba(245,200,66,0.55);
+  }
+
+  /* hover states (only affect individual word) */
+  .toggle-shame:hover { color: rgba(239,68,68,0.75); }
+  .toggle-fame:hover  { color: rgba(245,200,66,0.75); }
+
+  @keyframes pillPop {
+    0%   { transform: scaleY(0.8); opacity: 0.5; }
+    60%  { transform: scaleY(1.08); }
+    100% { transform: scaleY(1); opacity: 1; }
+  }
+
+  .toggle-pill.animating {
+    animation: pillPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  /* slider swap animation */
+  @keyframes swipeInLeft {
+    from { opacity: 0; transform: translateX(-28px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes swipeInRight {
+    from { opacity: 0; transform: translateX(28px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .slide-in-left  { animation: swipeInLeft  0.38s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+  .slide-in-right { animation: swipeInRight 0.38s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
 
   .slider-wrapper {
     position: relative;
@@ -253,11 +376,20 @@
     scroll-snap-stop: always;
   }
 
+  /* Shame card hover = red */
   .shame-card:hover {
     border-color: rgba(239, 68, 68, 0.4);
     transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(20px) translateY(-10px);
     box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
     background: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Fame card hover = yellow/angelic */
+  .shame-card.fame-card:hover {
+    border-color: rgba(245, 200, 66, 0.5);
+    transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(20px) translateY(-10px);
+    box-shadow: 0 20px 50px -10px rgba(245, 200, 66, 0.2), 0 0 30px rgba(255, 232, 130, 0.08);
+    background: rgba(245, 200, 66, 0.04);
   }
   
   .shame-card:not(:hover) {
@@ -295,6 +427,11 @@
     font-size: 0.85rem;
     color: var(--text-muted);
     line-height: 1.5;
+  }
+
+  /* fame card accent on title */
+  .fame-card h4 {
+    color: var(--fame-color);
   }
 
   .footer {
@@ -488,6 +625,7 @@
     }
     .hero-title.revealed { animation: fadeInDown 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
     .hero-sub.revealed { animation: fadeIn 1s ease-out 0.8s forwards; }
+    .hero-img.revealed { animation: fadeIn 1s ease-out 1s forwards; }
     .shame-section.revealed { animation: slideUp 1s ease-out 1.2s forwards; }
     .footer.revealed { animation: fadeIn 1s ease-out 2s forwards; }
   </style>
@@ -513,123 +651,155 @@
       <div class="hero-sub">
         i dont know whats that...
       </div>
+      <img class="hero-img" src="https://larping.top/larp-larping.web" alt="larp">
     </div>
 
     <div class="shame-section">
-      <div class="shame-header">
+      <div class="shame-header shame-active" id="shame-header">
         <div class="shame-line"></div>
-        <span>Hall of Shame</span>
+        <span style="display:inline-flex;align-items:center;gap:0.6rem;">
+          <span class="toggle-prefix">Hall of</span>
+          <span class="toggle-wrap" id="toggle-wrap">
+            <span class="toggle-pill pill-shame" id="toggle-pill"></span>
+            <span class="toggle-shame" id="toggle-shame">Shame</span>
+            <span class="toggle-fame" id="toggle-fame">Fame</span>
+          </span>
+        </span>
         <div class="shame-line"></div>
       </div>
 
-      <div class="slider-wrapper">
-        <button class="slider-btn prev hidden" id="slideLeft">&lsaquo;</button>
-        
-        <div class="slider-container" id="slider">
+      
+      <div id="shame-slider-wrap">
+        <div class="slider-wrapper">
+          <button class="slider-btn prev hidden" id="slideLeft">&lsaquo;</button>
           
-          <div class="shame-card" 
-               data-title="Rander - 6b8t's owner" 
-               data-desc="Ignoring questions??? Am i talking to a wall or a person dude" 
-               data-img="https://media.discordapp.net/attachments/1494782970916241528/1494782992709583020/image.png?ex=69e5d6e5&is=69e48565&hm=8bdcc66a702b13124b12f07e76b62cfd37faf1f209304fc3cb2bb1c289118867&=&format=webp&quality=lossless">
-            <img src="https://media.discordapp.net/attachments/1494782970916241528/1494782992709583020/image.png?ex=69e5d6e5&is=69e48565&hm=8bdcc66a702b13124b12f07e76b62cfd37faf1f209304fc3cb2bb1c289118867&=&format=webp&quality=lossless" alt="Rander" class="shame-img">
-            <div class="shame-content">
-              <h4>Rander - 6b8t's owner</h4>
-              <p>Ignoring questions??? Am i talking to a wall or a person dude</p>
+          <div class="slider-container" id="slider">
+            
+            <div class="shame-card" 
+                 data-title="Rander - 6b8t's owner" 
+                 data-desc="Ignoring questions??? Am i talking to a wall or a person dude" 
+                 data-img="https://larping.top/Rander.webp">
+              <img src="https://larping.top/Rander.webp" alt="Rander" class="shame-img">
+              <div class="shame-content">
+                <h4>Rander - 6b8t's owner</h4>
+                <p>Ignoring questions??? Am i talking to a wall or a person dude</p>
+              </div>
             </div>
+
+            <div class="shame-card" 
+                 data-title="Psycho - The second 6b8t owner" 
+                 data-desc="Muting me for NO reason?? i wasnt even rude i only said shut up because of bob guy is annoying" 
+                 data-img="https://larping.top/Psycho.webp">
+              <img src="https://larping.top/Psycho.webp" alt="Psycho" class="shame-img">
+              <div class="shame-content">
+                <h4>Psycho - The second 6b8t owner</h4>
+                <p>Muting me for NO reason?? i wasnt even rude i only said shut up because of bob guy is annoying</p>
+              </div>
+            </div>
+
+            <div class="shame-card" 
+                 data-title="2rx - Previous admin abuse owner" 
+                 data-desc="spreading misinformation without any proof thats randers face LOL" 
+                 data-img="https://larping.top/2rx.webp">
+              <img src="https://larping.top/2rx.webp" alt="2rx" class="shame-img">
+              <div class="shame-content">
+                <h4>2rx - Previous admin abuse owner</h4>
+                <p>spreading misinformation without any proof thats randers face LOL</p>
+              </div>
+            </div>
+
+            <div class="shame-card" 
+                 data-title="Psycho (yet again) - The second 6b8t owner" 
+                 data-desc="again admin abusing for telling them to shush up for a little because it was distracting" 
+                 data-img="https://larping.top/Psycho 2.webp">
+              <img src="https://larping.top/Psycho 2.webp" alt="Psycho" class="shame-img">
+              <div class="shame-content">
+                <h4>Psycho (yet again) - The second 6b8t owner</h4>
+                <p>again admin abusing for telling them to shush up for a little because it was distracting</p>
+              </div>
+            </div>
+
+            <div class="shame-card"
+                 data-title="DRIFTER99 & GoatedGamer - One weird and one OG 6b8t member"
+                 data-desc="Drifter99 acting like a weirdo and goatedgamer pretending to be an ai :skull:"
+                 data-img="https://larping.top/DRIFTER99 and GoatedGamer.webp">
+              <img src="https://larping.top/DRIFTER99 and GoatedGamer.webp" alt="DRIFTER99 & GoatedGamer" class="shame-img">
+              <div class="shame-content">
+                <h4>DRIFTER99 & GoatedGamer - One weird and one OG 6b8t member</h4>
+                <p>Drifter99 acting like a weirdo and goatedgamer pretending to be an ai :skull:</p>
+              </div>
+            </div>
+
+            <div class="shame-card"
+                 data-title="DRIFTER99 again - Weird 6b8t member"
+                 data-desc="Acting like a pdf... wtf"
+                 data-img="https://larping.top/DRIFTER99 2.webp">
+              <img src="https://larping.top/DRIFTER99 2.webp" alt="DRIFTER99 again" class="shame-img">
+              <div class="shame-content">
+                <h4>DRIFTER99 again - Weird 6b8t member</h4>
+                <p>Acting like a pdf... wtf</p>
+              </div>
+            </div>
+
+            <div class="shame-card"
+                 data-title="Kuma Bean - An OG 6b8t member"
+                 data-desc="xd"
+                 data-img="https://larping.top/Kuma Bean.webp">
+              <img src="https://larping.top/Kuma Bean.webp" alt="Kuma Bean" class="shame-img">
+              <div class="shame-content">
+                <h4>Kuma Bean - An OG 6b8t member</h4>
+                <p>xd</p>
+              </div>
+            </div>
+
+            <div class="shame-card"
+                 data-title="Anony - The guy no one liked"
+                 data-desc="An autistic guy who also made a kiddo twerk on camera (said by the victim's friend"
+                 data-img="https://larping.top/anony.webp">
+              <img src="https://larping.top/anony.webp" alt="Anony" class="shame-img">
+              <div class="shame-content">
+                <h4>Anony - The guy no one liked</h4>
+                <p>An autistic guy who also made a kiddo twerk on camera (said by the victim's friend</p>
+              </div>
+            </div>
+
+            <div class="shame-card" 
+                 data-title="P0E_EE - An OG user of 6b8t" 
+                 data-desc="..." 
+                 data-img="https://larping.top/P0E_EE.webp">
+              <img src="https://larping.top/P0E_EE.webp" alt="P0E_EE" class="shame-img">
+              <div class="shame-content">
+                <h4>P0E_EE - An OG user of 6b8t</h4>
+                <p>...</p>
+              </div>
+            </div>
+
           </div>
 
-          <div class="shame-card" 
-               data-title="Psycho - The second 6b8t owner" 
-               data-desc="Muting me for NO reason?? i wasnt even rude i only said shut up because of bob guy is annoying" 
-               data-img="https://media.discordapp.net/attachments/1494782970916241528/1495032463876165632/image.png?ex=69e6167b&is=69e4c4fb&hm=df900666340d62873d3ba524673c8622923f684ac37bd5f4c3c08e588d13af7f&=&format=webp&quality=lossless">
-            <img src="https://media.discordapp.net/attachments/1494782970916241528/1495032463876165632/image.png?ex=69e6167b&is=69e4c4fb&hm=df900666340d62873d3ba524673c8622923f684ac37bd5f4c3c08e588d13af7f&=&format=webp&quality=lossless" alt="Psycho" class="shame-img">
-            <div class="shame-content">
-              <h4>Psycho - The second 6b8t owner</h4>
-              <p>Muting me for NO reason?? i wasnt even rude i only said shut up because of bob guy is annoying</p>
-            </div>
-          </div>
-
-          <div class="shame-card" 
-               data-title="2rx - Previous admin abuse owner" 
-               data-desc="spreading misinformation without any proof thats randers face LOL" 
-               data-img="https://media.discordapp.net/attachments/1494782970916241528/1495436042327818392/image.png?ex=69e63cd8&is=69e4eb58&hm=57bdbcfd85e586baa40ef984fda5f562e6ff83f3b7a96121feb35a8de758287a&=&format=webp&quality=lossless">
-            <img src="https://media.discordapp.net/attachments/1494782970916241528/1495436042327818392/image.png?ex=69e63cd8&is=69e4eb58&hm=57bdbcfd85e586baa40ef984fda5f562e6ff83f3b7a96121feb35a8de758287a&=&format=webp&quality=lossless" alt="2rx" class="shame-img">
-            <div class="shame-content">
-              <h4>2rx - Previous admin abuse owner</h4>
-              <p>spreading misinformation without any proof thats randers face LOL</p>
-            </div>
-          </div>
-
-          <div class="shame-card" 
-               data-title="Psycho (yet again) - The second 6b8t owner" 
-               data-desc="again admin abusing for telling them to shush up for a little because it was distracting" 
-               data-img="https://media.discordapp.net/attachments/1494782970916241528/1495436470922772701/image.png?ex=69e63d3e&is=69e4ebbe&hm=a6a1322e7e9cb55398698314efab46f679560f09c988b3920ef866610d6a4724&=&format=webp&quality=lossless">
-            <img src="https://media.discordapp.net/attachments/1494782970916241528/1495436470922772701/image.png?ex=69e63d3e&is=69e4ebbe&hm=a6a1322e7e9cb55398698314efab46f679560f09c988b3920ef866610d6a4724&=&format=webp&quality=lossless" alt="Psycho" class="shame-img">
-            <div class="shame-content">
-              <h4>Psycho (yet again) - The second 6b8t owner</h4>
-              <p>again admin abusing for telling them to shush up for a little because it was distracting</p>
-            </div>
-          </div>
-
-          <div class="shame-card"
-               data-title="DRIFTER99 & GoatedGamer - One weird and one OG 6b8t member"
-               data-desc="Drifter99 acting like a weirdo and goatedgamer pretending to be an ai :skull:"
-               data-img="https://media.discordapp.net/attachments/1472193755535769713/1495555070769500261/Screenshot_2026-04-20-00-41-36-562_com.discord.png?ex=69e6abb2&is=69e55a32&hm=95a80a171ead9137a591eee7a52d4b9d61813ecd089d77c4c04e3d5cc7f60154&=&format=webp&quality=lossless">
-            <img src="https://media.discordapp.net/attachments/1472193755535769713/1495555070769500261/Screenshot_2026-04-20-00-41-36-562_com.discord.png?ex=69e6abb2&is=69e55a32&hm=95a80a171ead9137a591eee7a52d4b9d61813ecd089d77c4c04e3d5cc7f60154&=&format=webp&quality=lossless" alt="DRIFTER99 & GoatedGamer" class="shame-img">
-            <div class="shame-content">
-              <h4>DRIFTER99 & GoatedGamer - One weird and one OG 6b8t member</h4>
-              <p>Drifter99 acting like a weirdo and goatedgamer pretending to be an ai :skull:</p>
-            </div>
-          </div>
-
-          <div class="shame-card"
-               data-title="DRIFTER99 again - Weird 6b8t member"
-               data-desc="Acting like a pdf... wtf"
-               data-img="https://media.discordapp.net/attachments/1472193755535769713/1495555670194389122/Screenshot_2026-04-20-00-44-09-135_com.discord.png?ex=69e6ac41&is=69e55ac1&hm=3dee94d4e9cf977190318fbb50c3df92f6881fb3e8f2bd0980570177e38706b8&=&format=webp&quality=lossless&width=550&height=124">
-            <img src="https://media.discordapp.net/attachments/1472193755535769713/1495555670194389122/Screenshot_2026-04-20-00-44-09-135_com.discord.png?ex=69e6ac41&is=69e55ac1&hm=3dee94d4e9cf977190318fbb50c3df92f6881fb3e8f2bd0980570177e38706b8&=&format=webp&quality=lossless&width=550&height=124" alt="DRIFTER99 again" class="shame-img">
-            <div class="shame-content">
-              <h4>DRIFTER99 again - Weird 6b8t member</h4>
-              <p>Acting like a pdf... wtf</p>
-            </div>
-          </div>
-
-          <div class="shame-card"
-               data-title="Kuma Bean - An OG 6b8t member"
-               data-desc="xd"
-               data-img="https://media.discordapp.net/attachments/1472193755535769713/1495555071583457372/Screenshot_2026-04-20-00-40-29-207_com.discord.png?ex=69e6abb3&is=69e55a33&hm=0d8e82b8a202e005ad5b655928632f5da152fb7c9bd2843942b34bbaff8ac85f&=&format=webp&quality=lossless">
-            <img src="https://media.discordapp.net/attachments/1472193755535769713/1495555071583457372/Screenshot_2026-04-20-00-40-29-207_com.discord.png?ex=69e6abb3&is=69e55a33&hm=0d8e82b8a202e005ad5b655928632f5da152fb7c9bd2843942b34bbaff8ac85f&=&format=webp&quality=lossless" alt="Kuma Bean" class="shame-img">
-            <div class="shame-content">
-              <h4>Kuma Bean - An OG 6b8t member</h4>
-              <p>xd</p>
-            </div>
-          </div>
-
-          <div class="shame-card"
-               data-title="Anony - The guy no one liked"
-               data-desc="An autistic guy who also made a kiddo twerk on camera (said by the victim's friend"
-               data-img="https://media.discordapp.net/attachments/1495478046897995898/1495643626339041371/anonypedo1.png?ex=69e6fe2c&is=69e5acac&hm=0fad19ad8f63bc4549e7a40b270fb34ad2540b880ccd17268267526ec3a89d1d&=&format=webp&quality=lossless">
-            <img src="https://media.discordapp.net/attachments/1495478046897995898/1495643626339041371/anonypedo1.png?ex=69e6fe2c&is=69e5acac&hm=0fad19ad8f63bc4549e7a40b270fb34ad2540b880ccd17268267526ec3a89d1d&=&format=webp&quality=lossless" alt="Anony" class="shame-img">
-            <div class="shame-content">
-              <h4>Anony - The guy no one liked</h4>
-              <p>An autistic guy who also made a kiddo twerk on camera (said by the victim's friend</p>
-            </div>
-          </div>
-
-          <div class="shame-card" 
-               data-title="P0E_EE - An OG user of 6b8t" 
-               data-desc="..." 
-               data-img="https://media.discordapp.net/attachments/1472193755535769713/1495520791381671967/Screenshot_2026-04-19_at_20-25-13_30_Discord_68-_6b8t-Eagler.png?ex=69e68bc6&is=69e53a46&hm=1333ab64dea15960f3545b530c0262b0c496ec268c1665c63fa7f864298d0831&=&format=webp&quality=lossless">
-            <img src="https://media.discordapp.net/attachments/1472193755535769713/1495520791381671967/Screenshot_2026-04-19_at_20-25-13_30_Discord_68-_6b8t-Eagler.png?ex=69e68bc6&is=69e53a46&hm=1333ab64dea15960f3545b530c0262b0c496ec268c1665c63fa7f864298d0831&=&format=webp&quality=lossless" alt="P0E_EE" class="shame-img">
-            <div class="shame-content">
-              <h4>P0E_EE - An OG user of 6b8t</h4>
-              <p>...</p>
-            </div>
-          </div>
-
+          <button class="slider-btn next hidden" id="slideRight">&rsaquo;</button>
         </div>
-
-        <button class="slider-btn next hidden" id="slideRight">&rsaquo;</button>
       </div>
+
+      
+      <div id="fame-slider-wrap" style="display:none;">
+        <div class="slider-wrapper">
+          <div class="slider-container" id="fame-slider">
+
+            <div class="shame-card fame-card"
+                 data-title="Mrex - The LARPing legend..."
+                 data-desc="the one who made the website and its code..."
+                 data-img="https://larping.top/Screenshot 2026-04-21 203242.png">
+              <img src="https://larping.top/Screenshot 2026-04-21 203242.png" alt="Mrex" class="shame-img">
+              <div class="shame-content">
+                <h4>Mrex - The LARPing legend...</h4>
+                <p>the one who made the website and its code...</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div class="footer">
@@ -640,10 +810,6 @@
       <a class="footer-btn discord-btn" href="https://discord.gg/AKwVmNuafV" target="_blank">
         Join our Discord!
       </a>
-    </div>
-
-    <div style="display:flex; justify-content:center; margin-top:1rem; margin-bottom:1.5rem;">
-      <img id="banner-img" src="https://larping.top/betterthenalarp.png" alt="worse than a larp" style="max-width:230px; width:100%; border-radius:12px; border:1px solid rgba(255,255,255,0.08); box-shadow:0 8px 32px rgba(0,0,0,0.5); opacity:0.9; cursor:pointer;">
     </div>
   </div>
 
@@ -661,6 +827,7 @@
 
             document.querySelector('.hero-title').classList.add('revealed');
             document.querySelector('.hero-sub').classList.add('revealed');
+            document.querySelector('.hero-img').classList.add('revealed');
             document.querySelector('.shame-section').classList.add('revealed');
             document.querySelector('.footer').classList.add('revealed');
         });
@@ -673,10 +840,62 @@
             window.open(url, '_blank');
         });
 
-        document.getElementById('banner-img').addEventListener('click', () => {
-            window.open('https://www.youtube.com/watch?v=TFyUl4nXc_4&t=17s', '_blank');
+        
+        const shameHeader = document.getElementById('shame-header');
+        const toggleShame = document.getElementById('toggle-shame');
+        const toggleFame  = document.getElementById('toggle-fame');
+        const togglePill  = document.getElementById('toggle-pill');
+        const toggleWrap  = document.getElementById('toggle-wrap');
+        const shameWrap   = document.getElementById('shame-slider-wrap');
+        const fameWrap    = document.getElementById('fame-slider-wrap');
+
+        let isFameActive = false;
+
+        function positionPill(target, instant) {
+            const wrapRect = toggleWrap.getBoundingClientRect();
+            const targetRect = target.getBoundingClientRect();
+            const left = targetRect.left - wrapRect.left;
+            const width = targetRect.width;
+            togglePill.style.transition = instant
+                ? 'none'
+                : 'left 0.4s cubic-bezier(0.34,1.56,0.64,1), width 0.4s cubic-bezier(0.34,1.56,0.64,1), background 0.4s ease, box-shadow 0.4s ease';
+            togglePill.style.left  = left + 'px';
+            togglePill.style.width = width + 'px';
+        }
+
+        
+        requestAnimationFrame(() => positionPill(toggleShame, true));
+        window.addEventListener('resize', () => positionPill(isFameActive ? toggleFame : toggleShame, true));
+
+        toggleFame.addEventListener('click', () => {
+            if (isFameActive) return;
+            isFameActive = true;
+            togglePill.className = 'toggle-pill pill-fame animating';
+            positionPill(toggleFame, false);
+            setTimeout(() => togglePill.classList.remove('animating'), 400);
+            shameHeader.classList.replace('shame-active', 'fame-active');
+            shameWrap.style.display = 'none';
+            fameWrap.style.display = 'block';
+            fameWrap.classList.remove('slide-in-left');
+            void fameWrap.offsetWidth;
+            fameWrap.classList.add('slide-in-right');
         });
 
+        toggleShame.addEventListener('click', () => {
+            if (!isFameActive) return;
+            isFameActive = false;
+            togglePill.className = 'toggle-pill pill-shame animating';
+            positionPill(toggleShame, false);
+            setTimeout(() => togglePill.classList.remove('animating'), 400);
+            shameHeader.classList.replace('fame-active', 'shame-active');
+            fameWrap.style.display = 'none';
+            shameWrap.style.display = 'block';
+            shameWrap.classList.remove('slide-in-right');
+            void shameWrap.offsetWidth;
+            shameWrap.classList.add('slide-in-left');
+        });
+
+        
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
        
@@ -794,10 +1013,11 @@
         resize();
         animate();
 
+        
         const slider = document.getElementById('slider');
         const leftBtn = document.getElementById('slideLeft');
         const rightBtn = document.getElementById('slideRight');
-        const cards = document.querySelectorAll('.shame-card');
+        const cards = document.querySelectorAll('#slider .shame-card');
 
         let currentIndex = 0;
         let isProgrammaticScroll = false;
@@ -853,36 +1073,38 @@
 
         setTimeout(updateArrows, 100);
 
-        cards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -10;
-                const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 10;
-                card.style.setProperty('--rx', `${rotateX}deg`);
-                card.style.setProperty('--ry', `${rotateY}deg`);
+        
+        function initCards(selector) {
+            document.querySelectorAll(selector).forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -10;
+                    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 10;
+                    card.style.setProperty('--rx', `${rotateX}deg`);
+                    card.style.setProperty('--ry', `${rotateY}deg`);
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.setProperty('--rx', '0deg');
+                    card.style.setProperty('--ry', '0deg');
+                });
+                card.addEventListener('click', () => {
+                    modalTitle.textContent = card.getAttribute('data-title');
+                    modalDesc.textContent = card.getAttribute('data-desc');
+                    modalImg.src = card.getAttribute('data-img');
+                    modal.classList.add('active');
+                });
             });
-            card.addEventListener('mouseleave', () => {
-                card.style.setProperty('--rx', '0deg');
-                card.style.setProperty('--ry', '0deg');
-            });
-        });
+        }
+
+        initCards('.shame-card');
 
         const modal = document.getElementById('modal');
         const modalImg = document.getElementById('modal-img');
         const modalTitle = document.getElementById('modal-title');
         const modalDesc = document.getElementById('modal-desc');
         const closeBtn = document.querySelector('.close-modal');
-
-        cards.forEach(card => {
-            card.addEventListener('click', () => {
-                modalTitle.textContent = card.getAttribute('data-title');
-                modalDesc.textContent = card.getAttribute('data-desc');
-                modalImg.src = card.getAttribute('data-img');
-                modal.classList.add('active');
-            });
-        });
 
         function closeModal() {
             modal.classList.remove('active');
