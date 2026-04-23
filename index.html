@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>the LARPing website</title>
+<title>larping.top</title>
 <meta name="description" content="there's no limit to the LARP."/>
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="the LARPing website"/>
@@ -11,1124 +11,482 @@
 <meta property="og:url" content="https://larping.top/"/>
 <meta property="og:image" content="https://larping.top/we%20love%20you%20benjamin.jpg"/>
 <meta property="og:site_name" content="the LARPing website"/>
+<link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any"/>
+<meta name="theme-color" content="#050508" />
+<meta name="color-scheme" content="dark" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@300;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://larping.zmbie.shop" crossorigin>
 
 <style>
-  :root {
-    --bg-color: #020204;
-    --text-main: #f3f4f6;
-    --text-muted: #9ca3af;
-    --accent-base: #22d3ee;
-    --accent-glow: #67e8f9;
-    --danger: #ef4444;
-    --fame-color: #f5c842;
-    --fame-glow: #ffe882;
-    --card-bg: rgba(20, 20, 25, 0.6);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --font-stack: 'Inter', sans-serif;
-  }
-
-  *, *::before, *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  html { scroll-behavior: smooth; }
-  ::-webkit-scrollbar { width: 0px; background: transparent; }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #050508; color: #f4f4f5; font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { min-height: 100vh; min-height: 100dvh; overflow-x: hidden; }
+  ::-webkit-scrollbar { width: 0; background: transparent; }
   body { -ms-overflow-style: none; scrollbar-width: none; }
 
-  body {
-    background-color: var(--bg-color);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: var(--font-stack);
-    overflow: hidden;
-    color: var(--text-main);
-    position: relative;
+  #boot-screen {
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1.1rem;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 30%, rgba(34, 211, 238, 0.1) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 40% at 50% 70%, rgba(167, 139, 250, 0.05) 0%, transparent 50%),
+      #030307;
+    cursor: default;
+    transition: opacity 0.45s ease;
   }
 
-  .ambient-glow {
-    position: fixed;
-    inset: 0;
-    background: 
-      radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.05) 0%, transparent 40%),
-      radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.03) 0%, transparent 30%);
-    z-index: 0;
-    pointer-events: none;
+  #boot-screen.fade { opacity: 0; pointer-events: none; }
+
+  #boot-screen .mark {
+    width: 56px; height: 56px; border-radius: 14px;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(6, 182, 212, 0.05));
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    color: #a5f3fc;
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 1.6rem; font-weight: 700; letter-spacing: -0.04em;
+    box-shadow: 0 12px 32px rgba(34, 211, 238, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    animation: bootPulse 1.6s ease-in-out infinite;
   }
 
-  .noise-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    opacity: 0.03;
-    pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+  #boot-screen .label {
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 0.62rem; font-weight: 600;
+    letter-spacing: 0.32em; text-transform: uppercase;
+    color: #a1a1aa;
   }
 
-  #particle-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
+  #boot-screen .err {
+    color: #fb7185; font-size: 0.78rem; max-width: 22rem;
+    text-align: center; padding: 0 1rem; line-height: 1.5;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
   }
 
-  .container {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    max-width: 1000px;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 50px; 
+  @keyframes bootPulse {
+    0%, 100% { box-shadow: 0 12px 32px rgba(34, 211, 238, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08); transform: scale(1); }
+    50%      { box-shadow: 0 18px 44px rgba(34, 211, 238, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.14); transform: scale(1.04); }
   }
 
-  .hero {
-    text-align: center;
-    margin-bottom: 0.5rem;
-  }
-
-  .hero-title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 300;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-    margin-bottom: 1rem;
-    text-shadow: 0 10px 40px rgba(0,0,0,0.8);
-    opacity: 0;
-  }
-
-  .hero-sub {
-    font-size: 1.1rem;
-    color: var(--text-muted);
-    font-weight: 400;
-    letter-spacing: -0.01em;
-    opacity: 0;
-    margin-bottom: 1.2rem;
-  }
-
-  
-  .hero-img {
-    display: block;
-    margin: 0 auto;
-    max-width: 90px;
-    width: 100%;
-    border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
-    opacity: 0;
-  }
-
-  .larp-link {
-    color: var(--accent-base);
-    text-decoration: none;
-    position: relative;
-    font-weight: 600;
-    display: inline-block;
-    transition: color 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  .larp-link::after {
-    content: '';
-    position: absolute;
-    width: 0%;
-    height: 3px;
-    bottom: -4px;
-    left: 0;
-    background-color: var(--accent-glow);
-    transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-    box-shadow: 0 0 10px var(--accent-base);
-  }
-
-  .larp-link:hover {
-    color: #ffffff;
-    transform: scale(1.05);
-    text-shadow: 0 0 20px rgba(34, 211, 238, 0.6);
-  }
-
-  .larp-link:hover::after {
-    width: 100%;
-  }
-
-  .shame-section {
-    width: 100%;
-    margin-bottom: 1.5rem;
-    position: relative;
-    opacity: 0;
-  }
-
-  .shame-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: rgba(255,255,255,0.35);
-  }
-
-  .shame-line {
-    height: 1px;
-    width: 50px;
-    background: rgba(255,255,255,0.12);
-    transition: background 0.5s ease, box-shadow 0.5s ease;
-  }
-
-  .shame-header.shame-active .shame-line {
-    background: rgba(239, 68, 68, 0.45);
-    box-shadow: 0 0 6px rgba(239,68,68,0.2);
-  }
-
-  .shame-header.fame-active .shame-line {
-    background: rgba(245, 200, 66, 0.45);
-    box-shadow: 0 0 6px rgba(245,200,66,0.2);
-  }
-
-  
-  .toggle-prefix {
-    color: rgba(255,255,255,0.3);
-    font-size: 0.9rem;
-    letter-spacing: 0.2em;
-    user-select: none;
-  }
-
-  
-  .toggle-wrap {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 0;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 999px;
-    padding: 3px;
-    overflow: hidden;
-  }
-
-  
-  .toggle-pill {
-    position: absolute;
-    top: 3px;
-    bottom: 3px;
-    border-radius: 999px;
-    transition: left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                background 0.4s ease,
-                box-shadow 0.4s ease;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .toggle-pill.pill-shame {
-    background: rgba(239, 68, 68, 0.18);
-    box-shadow: 0 0 14px rgba(239,68,68,0.25), inset 0 0 8px rgba(239,68,68,0.08);
-  }
-
-  .toggle-pill.pill-fame {
-    background: rgba(245, 200, 66, 0.15);
-    box-shadow: 0 0 14px rgba(245,200,66,0.2), inset 0 0 8px rgba(245,200,66,0.06);
-  }
-
-  .toggle-shame, .toggle-fame {
-    position: relative;
-    z-index: 1;
-    cursor: pointer;
-    padding: 4px 14px;
-    border-radius: 999px;
-    font-size: 0.8rem;
-    letter-spacing: 0.18em;
-    font-weight: 600;
-    user-select: none;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-  }
-
-  
-  .toggle-shame { color: rgba(255,255,255,0.3); }
-  .toggle-fame  { color: rgba(255,255,255,0.3); }
-
-  
-  .shame-header.shame-active .toggle-shame {
-    color: #ef4444;
-    text-shadow: 0 0 10px rgba(239,68,68,0.55);
-  }
-  .shame-header.fame-active .toggle-fame {
-    color: var(--fame-color);
-    text-shadow: 0 0 10px rgba(245,200,66,0.55);
-  }
-
-  
-  .toggle-shame:hover { color: rgba(239,68,68,0.75); }
-  .toggle-fame:hover  { color: rgba(245,200,66,0.75); }
-
-  @keyframes pillPop {
-    0%   { transform: scaleY(0.8); opacity: 0.5; }
-    60%  { transform: scaleY(1.08); }
-    100% { transform: scaleY(1); opacity: 1; }
-  }
-
-  .toggle-pill.animating {
-    animation: pillPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  }
-
-  
-  @keyframes swipeInLeft {
-    from { opacity: 0; transform: translateX(-28px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-  @keyframes swipeInRight {
-    from { opacity: 0; transform: translateX(28px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-  .slide-in-left  { animation: swipeInLeft  0.38s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-  .slide-in-right { animation: swipeInRight 0.38s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-
-  .slider-wrapper {
-    position: relative;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    perspective: 1000px;
-    padding: 0 35px;
-  }
-
-  .slider-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(255,255,255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #fff;
-    cursor: pointer;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease, opacity 0.2s ease;
-    font-size: 1.2rem;
-  }
-
-  .slider-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-50%) scale(1.1);
-  }
-
-  .slider-btn.prev { left: -30px; }
-  .slider-btn.next { right: -30px; }
-
-  .slider-btn.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .slider-container {
-    display: flex;
-    overflow-x: auto;
-    gap: 1.5rem;
-    scroll-snap-type: x mandatory;
-    scroll-snap-stop: always;
-    padding: 20px calc(50% - 150px);
-    width: 100%;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  
-  .slider-container::-webkit-scrollbar {
-    display: none; 
-  }
-
-  .shame-card {
-    min-width: 300px;
-    max-width: 300px;
-    flex-shrink: 0;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    backdrop-filter: blur(12px);
-    
-    transform-style: preserve-3d;
-    transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
-    will-change: transform;
-    
-    transition: transform 0.1s ease; 
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    scroll-snap-align: center;
-    scroll-snap-stop: always;
-  }
-
-  
-  .shame-card:hover {
-    border-color: rgba(239, 68, 68, 0.4);
-    transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(20px) translateY(-10px);
-    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  
-  .shame-card.fame-card:hover {
-    border-color: rgba(245, 200, 66, 0.5);
-    transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(20px) translateY(-10px);
-    box-shadow: 0 20px 50px -10px rgba(245, 200, 66, 0.2), 0 0 30px rgba(255, 232, 130, 0.08);
-    background: rgba(245, 200, 66, 0.04);
-  }
-  
-  .shame-card:not(:hover) {
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  .shame-card:active {
-    transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(10px) scale(0.98);
-  }
-
-  .shame-img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    pointer-events: none; 
-  }
-
-  .shame-content {
-    padding: 1.5rem;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    pointer-events: none; 
-  }
-
-  .shame-card h4 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #fff;
-  }
-
-  .shame-card p {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
-
-  
-  .fame-card h4 {
-    color: var(--fame-color);
-  }
-
-  .footer {
-    z-index: 20;
-    margin-bottom: 3rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    opacity: 0;
-  }
-
-  .footer-btn {
-    font-size: 0.75rem;
-    color: #ffffff;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease; 
-    padding: 0.4rem 1rem;
-    border-radius: 6px;
-    font-weight: 500;
-  }
-
-  .contact-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
-  }
-
-  .contact-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 15px rgba(255,255,255,0.1);
-    transform: translateY(-2px); 
-  }
-
-  .footer-or {
-    color: var(--text-muted);
-    font-size: 0.7rem;
-    font-weight: 600;
-  }
-
-  .discord-btn {
-    background: #5865F2; 
-    border: 1px solid #5865F2;
-  }
-
-  .discord-btn:hover {
-    background: #4752C4;
-    box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
-    transform: translateY(-2px); 
-  }
-
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(10px);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-    padding: 1rem;
-  }
-
-  .modal-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .modal-content {
-    background: #0f0f11;
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    width: 100%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    transform: scale(0.95);
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .modal-overlay.active .modal-content {
-    transform: scale(1);
-  }
-
-  .modal-image {
-    width: 100%;
-    height: auto;
-    max-height: 75vh; 
-    object-fit: contain; 
-    background: #000;
-    display: block;
-  }
-
-  .modal-text {
-    padding: 1.5rem;
-    text-align: left;
-  }
-
-  .modal-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #fff;
-  }
-
-  .modal-desc {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-  }
-
-  .close-modal {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: rgba(0,0,0,0.6);
-    border: none;
-    color: #fff;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    transition: background 0.2s;
-    z-index: 10;
-  }
-
-  .close-modal:hover {
-    background: rgba(239, 68, 68, 0.8);
-  }
-
-  @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    to { opacity: 1; }
-  }
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @media (max-width: 768px) {
-    .slider-btn { display: none; } 
-    .shame-card { min-width: 85vw; max-width: 85vw; }
-  }
+  body.app-ready #boot-screen { display: none; }
+  body:not(.app-ready) #app-root,
+  body:not(.app-ready) .page-backdrop,
+  body:not(.app-ready) .ambient-glow,
+  body:not(.app-ready) .grid-overlay,
+  body:not(.app-ready) .noise-overlay,
+  body:not(.app-ready) #particle-canvas,
+  body:not(.app-ready) #intro-screen { visibility: hidden; }
 </style>
 </head>
 <body>
 
-  <div id="intro-screen" style="
-    position: fixed;
-    inset: 0;
-    background: #000;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: opacity 0.8s ease;
-  ">
-    <span style="
-      font-family: 'Courier New', monospace;
-      font-size: 0.85rem;
-      letter-spacing: 0.25em;
-      color: rgba(255,255,255,0.9);
-      user-select: none;
-    ">[ click to enter ]</span>
-  </div>
+<div id="boot-screen" role="status" aria-live="polite">
+  <div class="mark" aria-hidden="true">L</div>
+  <div class="label">Loading</div>
+</div>
 
-  <audio id="bg-music" src="https://larping.top/bluelarps.mp3" loop preload="auto"></audio>
+<div id="intro-screen" role="button" tabindex="0" aria-label="Enter site">
+  <div class="intro-mark" aria-hidden="true">L</div>
+  <p class="intro-cta">Enter<kbd>click or press enter</kbd></p>
+</div>
 
-  <style>
-    @keyframes introPulse {
-      0%, 100% { opacity: 0.35; }
-      50% { opacity: 0.7; }
+<audio id="bg-music" loop preload="auto"></audio>
+
+<div class="page-backdrop" aria-hidden="true"></div>
+<div class="ambient-glow" aria-hidden="true"></div>
+<div class="grid-overlay" aria-hidden="true"></div>
+<div class="noise-overlay" aria-hidden="true"></div>
+<canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+<div class="container" id="app-root"></div>
+
+<script>
+(function () {
+  const API_URL = 'https://larping.zmbie.shop/payload';
+
+  function showBootError(msg) {
+    const boot = document.getElementById('boot-screen');
+    if (!boot) return;
+    boot.innerHTML = '<div class="err">' + String(msg).replace(/[<>&]/g, function (c) {
+      return ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c];
+    }) + '</div>';
+  }
+
+  async function loadApi() {
+    let res;
+    try {
+      res = await fetch(API_URL, { mode: 'cors', credentials: 'omit', cache: 'no-cache' });
+    } catch (e) {
+      throw new Error('Network error fetching api');
     }
-    .hero-title.revealed { animation: fadeInDown 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-    .hero-sub.revealed { animation: fadeIn 1s ease-out 0.8s forwards; }
-    .hero-img.revealed { animation: fadeIn 1s ease-out 1s forwards; }
-    .shame-section.revealed { animation: slideUp 1s ease-out 1.2s forwards; }
-    .footer.revealed { animation: fadeIn 1s ease-out 2s forwards; }
-  </style>
-  <div class="noise-overlay"></div>
-  <canvas id="particle-canvas"></canvas>
+    if (!res.ok) throw new Error('Failed to load api (' + res.status + ')');
+    const text = await res.text();
+    const doc = new DOMParser().parseFromString(text, 'text/html');
 
-  <div class="modal-overlay" id="modal">
-    <div class="modal-content">
-      <button class="close-modal">&times;</button>
-      <img src="" alt="Full view" class="modal-image" id="modal-img">
-      <div class="modal-text">
-        <h3 class="modal-title" id="modal-title"></h3>
-        <p class="modal-desc" id="modal-desc"></p>
-      </div>
-    </div>
-  </div>
+    const styleEl   = doc.getElementById('app-styles');
+    const tplEl     = doc.getElementById('app-html');
+    const cfgEl     = doc.getElementById('app-config');
 
-  <div class="container">
-    <div class="hero">
-      <div class="hero-title">
-        <a class="larp-link" id="larp-link" href="#" target="_blank">LARP</a>ing?
-      </div>
-      <div class="hero-sub">
-        i dont know whats that...
-      </div>
-      <img class="hero-img" src="https://larping.top/larp-larping.webp" alt="larp">
-    </div>
+    if (!styleEl || !tplEl || !cfgEl) {
+      throw new Error('Malformed payload at ' + API_URL);
+    }
 
-    <div class="shame-section">
-      <div class="shame-header shame-active" id="shame-header">
-        <div class="shame-line"></div>
-        <span style="display:inline-flex;align-items:center;gap:0.6rem;">
-          <span class="toggle-prefix">Aura Of</span>
-          <span class="toggle-wrap" id="toggle-wrap">
-            <span class="toggle-pill pill-shame" id="toggle-pill"></span>
-            <span class="toggle-shame" id="toggle-shame">Shame</span>
-            <span class="toggle-fame" id="toggle-fame">Fame</span>
-          </span>
-        </span>
-        <div class="shame-line"></div>
-      </div>
+    const injected = document.createElement('style');
+    injected.id = 'app-styles';
+    injected.textContent = styleEl.textContent;
+    document.head.appendChild(injected);
 
-      
-      <div id="shame-slider-wrap">
-        <div class="slider-wrapper">
-          <button class="slider-btn prev hidden" id="slideLeft">&lsaquo;</button>
-          
-          <div class="slider-container" id="slider">
-            
-            <div class="shame-card" 
-                 data-title="Rander - 6b8t's owner" 
-                 data-desc="Ignoring questions??? Am i talking to a wall or a person dude" 
-                 data-img="https://larping.top/Rander.webp">
-              <img src="https://larping.top/Rander.webp" alt="Rander" class="shame-img">
-              <div class="shame-content">
-                <h4>Rander - 6b8t's owner</h4>
-                <p>Ignoring questions??? Am i talking to a wall or a person dude</p>
-              </div>
-            </div>
+    let config = {};
+    try { config = JSON.parse(cfgEl.textContent); } catch (e) { config = {}; }
 
-            <div class="shame-card" 
-                 data-title="Psycho - The second 6b8t owner" 
-                 data-desc="Muting me for NO reason?? i wasnt even rude i only said shut up because of bob guy is annoying" 
-                 data-img="https://larping.top/Psycho.webp">
-              <img src="https://larping.top/Psycho.webp" alt="Psycho" class="shame-img">
-              <div class="shame-content">
-                <h4>Psycho - The second 6b8t owner</h4>
-                <p>Muting me for NO reason?? i wasnt even rude i only said shut up because of bob guy is annoying</p>
-              </div>
-            </div>
+    const root = document.getElementById('app-root');
+    const frag = tplEl.content ? tplEl.content.cloneNode(true) : null;
+    if (frag) {
+      root.appendChild(frag);
+    } else {
+      root.innerHTML = tplEl.innerHTML;
+    }
 
-            <div class="shame-card" 
-                 data-title="2rx - Previous admin abuse owner" 
-                 data-desc="spreading misinformation without any proof thats randers face LOL" 
-                 data-img="https://larping.top/2rx.webp">
-              <img src="https://larping.top/2rx.webp" alt="2rx" class="shame-img">
-              <div class="shame-content">
-                <h4>2rx - Previous admin abuse owner</h4>
-                <p>spreading misinformation without any proof thats randers face LOL</p>
-              </div>
-            </div>
+    return config;
+  }
 
-            <div class="shame-card" 
-                 data-title="Psycho (yet again) - The second 6b8t owner" 
-                 data-desc="again admin abusing for telling them to shush up for a little because it was distracting" 
-                 data-img="https://larping.top/Psycho 2.webp">
-              <img src="https://larping.top/Psycho 2.webp" alt="Psycho" class="shame-img">
-              <div class="shame-content">
-                <h4>Psycho (yet again) - The second 6b8t owner</h4>
-                <p>again admin abusing for telling them to shush up for a little because it was distracting</p>
-              </div>
-            </div>
+  function bootstrap(config) {
+    const intro = document.getElementById('intro-screen');
+    const music = document.getElementById('bg-music');
+    if (config.musicUrl) music.src = config.musicUrl;
 
-            <div class="shame-card"
-                 data-title="DRIFTER99 & GoatedGamer - One weird and one OG 6b8t member"
-                 data-desc="Drifter99 acting like a weirdo and goatedgamer pretending to be an ai :skull:"
-                 data-img="https://larping.top/DRIFTER99 and GoatedGamer.webp">
-              <img src="https://larping.top/DRIFTER99 and GoatedGamer.webp" alt="DRIFTER99 & GoatedGamer" class="shame-img">
-              <div class="shame-content">
-                <h4>DRIFTER99 & GoatedGamer - One weird and one OG 6b8t member</h4>
-                <p>Drifter99 acting like a weirdo and goatedgamer pretending to be an ai :skull:</p>
-              </div>
-            </div>
+    function enterSite() {
+      if (intro.getAttribute('data-left')) return;
+      intro.setAttribute('data-left', '1');
+      music.volume = 1.0;
+      music.play().catch(function () {});
+      intro.style.opacity = '0';
+      intro.style.pointerEvents = 'none';
+      setTimeout(function () { intro.remove(); }, 1100);
 
-            <div class="shame-card"
-                 data-title="DRIFTER99 again - Weird 6b8t member"
-                 data-desc="Acting like a pdf... wtf"
-                 data-img="https://larping.top/DRIFTER99 2.webp">
-              <img src="https://larping.top/DRIFTER99 2.webp" alt="DRIFTER99 again" class="shame-img">
-              <div class="shame-content">
-                <h4>DRIFTER99 again - Weird 6b8t member</h4>
-                <p>Acting like a pdf... wtf</p>
-              </div>
-            </div>
+      [
+        '.site-badge',
+        '.hero-title',
+        '.hero-sub',
+        '.hero-img-wrap',
+        '#aura-section',
+        '#match-section',
+        '.footer'
+      ].forEach(function (sel) {
+        const el = document.querySelector(sel);
+        if (el) el.classList.add('revealed');
+      });
+    }
 
-            <div class="shame-card"
-                 data-title="Kuma Bean - An OG 6b8t member"
-                 data-desc="xd"
-                 data-img="https://larping.top/Kuma Bean.webp">
-              <img src="https://larping.top/Kuma Bean.webp" alt="Kuma Bean" class="shame-img">
-              <div class="shame-content">
-                <h4>Kuma Bean - An OG 6b8t member</h4>
-                <p>xd</p>
-              </div>
-            </div>
-
-            <div class="shame-card"
-                 data-title="Anony - The guy no one liked"
-                 data-desc="An autistic guy who also made a kiddo twerk on camera (said by the victim's friend"
-                 data-img="https://larping.top/anony.webp">
-              <img src="https://larping.top/anony.webp" alt="Anony" class="shame-img">
-              <div class="shame-content">
-                <h4>Anony - The guy no one liked</h4>
-                <p>An autistic guy who also made a kiddo twerk on camera (said by the victim's friend</p>
-              </div>
-            </div>
-
-            <div class="shame-card" 
-                 data-title="P0E_EE - An OG user of 6b8t" 
-                 data-desc="..." 
-                 data-img="https://larping.top/P0E_EE.webp">
-              <img src="https://larping.top/P0E_EE.webp" alt="P0E_EE" class="shame-img">
-              <div class="shame-content">
-                <h4>P0E_EE - An OG user of 6b8t</h4>
-                <p>...</p>
-              </div>
-            </div>
-
-          </div>
-
-          <button class="slider-btn next hidden" id="slideRight">&rsaquo;</button>
-        </div>
-      </div>
-
-      
-      <div id="fame-slider-wrap" style="display:none;">
-        <div class="slider-wrapper">
-          <div class="slider-container" id="fame-slider">
-
-            <div class="shame-card fame-card"
-                 data-title="Skelly - The LARPing legend..."
-                 data-desc="skelly the goat..."
-                 data-img="https://larping.top/Screenshot 2026-04-21 203242.png">
-              <img src="https://larping.top/Screenshot 2026-04-21 203242.png" alt="Mrex" class="shame-img">
-              <div class="shame-content">
-                <h4>Skelly - The LARPing legend...</h4>
-                <h1>meow :D >3<</h1>
-              </div>
-            </div>
-            
-            <div class="shame-card fame-card"
-                 data-title="Sar - The good LARPing guy..."
-                 data-desc="ratted TD Co owner + 3 pedophiles"
-                 data-img="https://larping.top/sartheguy.webp">
-              <img src="https://larping.top/sartheguy.webp" alt="Sar" class="shame-img">
-              <div class="shame-content">
-                <h4>Sar - The good LARPing guy...</h4>
-                <p>ratted TD Co owner + 3 pedophiles</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="footer">
-      <a class="footer-btn contact-btn" href="https://mail.google.com/mail/?view=cm&fs=1&to=mrex@larping.top" target="_blank">
-        Contact ME! :3
-      </a>
-      <span class="footer-or">OR</span>
-      <a class="footer-btn discord-btn" href="https://discord.gg/AKwVmNuafV" target="_blank">
-        Join our Discord!
-      </a>
-    </div>
-  </div>
-
- <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const intro = document.getElementById('intro-screen');
-        const music = document.getElementById('bg-music');
-
-        intro.addEventListener('click', () => {
-            music.volume = 1.0;
-            music.play();
-            intro.style.opacity = '0';
-            intro.style.pointerEvents = 'none';
-            setTimeout(() => intro.remove(), 800);
-
-            document.querySelector('.hero-title').classList.add('revealed');
-            document.querySelector('.hero-sub').classList.add('revealed');
-            document.querySelector('.hero-img').classList.add('revealed');
-            document.querySelector('.shame-section').classList.add('revealed');
-            document.querySelector('.footer').classList.add('revealed');
-        });
-
-        document.getElementById('larp-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            const url = Math.random() < 0.05
-                ? 'https://www.youtube.com/watch?v=H91lNeuf0W4&t=34s'
-                : 'https://larping.top/larp-flight.png';
-            window.open(url, '_blank');
-        });
-
-        
-        const shameHeader = document.getElementById('shame-header');
-        const toggleShame = document.getElementById('toggle-shame');
-        const toggleFame  = document.getElementById('toggle-fame');
-        const togglePill  = document.getElementById('toggle-pill');
-        const toggleWrap  = document.getElementById('toggle-wrap');
-        const shameWrap   = document.getElementById('shame-slider-wrap');
-        const fameWrap    = document.getElementById('fame-slider-wrap');
-
-        let isFameActive = false;
-
-        function positionPill(target, instant) {
-            const wrapRect = toggleWrap.getBoundingClientRect();
-            const targetRect = target.getBoundingClientRect();
-            const left = targetRect.left - wrapRect.left;
-            const width = targetRect.width;
-            togglePill.style.transition = instant
-                ? 'none'
-                : 'left 0.4s cubic-bezier(0.34,1.56,0.64,1), width 0.4s cubic-bezier(0.34,1.56,0.64,1), background 0.4s ease, box-shadow 0.4s ease';
-            togglePill.style.left  = left + 'px';
-            togglePill.style.width = width + 'px';
-        }
-
-        
-        requestAnimationFrame(() => positionPill(toggleShame, true));
-        window.addEventListener('resize', () => positionPill(isFameActive ? toggleFame : toggleShame, true));
-
-        toggleFame.addEventListener('click', () => {
-            if (isFameActive) return;
-            isFameActive = true;
-            togglePill.className = 'toggle-pill pill-fame animating';
-            positionPill(toggleFame, false);
-            setTimeout(() => togglePill.classList.remove('animating'), 400);
-            shameHeader.classList.replace('shame-active', 'fame-active');
-            shameWrap.style.display = 'none';
-            fameWrap.style.display = 'block';
-            fameWrap.classList.remove('slide-in-left');
-            void fameWrap.offsetWidth;
-            fameWrap.classList.add('slide-in-right');
-        });
-
-        toggleShame.addEventListener('click', () => {
-            if (!isFameActive) return;
-            isFameActive = false;
-            togglePill.className = 'toggle-pill pill-shame animating';
-            positionPill(toggleShame, false);
-            setTimeout(() => togglePill.classList.remove('animating'), 400);
-            shameHeader.classList.replace('fame-active', 'shame-active');
-            fameWrap.style.display = 'none';
-            shameWrap.style.display = 'block';
-            shameWrap.classList.remove('slide-in-right');
-            void shameWrap.offsetWidth;
-            shameWrap.classList.add('slide-in-left');
-        });
-
-        
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-       
-        let width, height;
-        let particles = [];
-       
-        const config = {
-            particleCount: window.innerWidth < 600 ? 40 : 70,
-            connectionDistance: 110,
-            mouseRepelDist: 90,
-            mouseForce: 3,
-            baseSpeed: 0.25
-        };
-
-        let mouse = { x: null, y: null };
-
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
-        });
-       
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            initParticles();
-        }
-
-        class Particle {
-            constructor() {
-                this.reset(true);
-            }
-            reset(randomY = false) {
-                this.x = Math.random() * width;
-                this.y = randomY ? Math.random() * height : Math.random() * height;
-                this.size = Math.random() * 1.2 + 0.6;
-                const angle = Math.random() * Math.PI * 2;
-                const speed = config.baseSpeed * (0.6 + Math.random() * 0.8);
-                this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed;
-                this.opacity = Math.random() * 0.35 + 0.15;
-                this.hue = 185 + Math.random() * 20;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (mouse.x != null) {
-                    const dx = mouse.x - this.x;
-                    const dy = mouse.y - this.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                   
-                    if (distance < config.mouseRepelDist && distance > 0) {
-                        const force = (config.mouseRepelDist - distance) / config.mouseRepelDist;
-                        this.x -= (dx / distance) * force * config.mouseForce;
-                        this.y -= (dy / distance) * force * config.mouseForce;
-                    }
-                }
-
-                if (this.x < 0) this.x = width;
-                if (this.x > width) this.x = 0;
-                if (this.y < 0) this.y = height;
-                if (this.y > height) this.y = 0;
-            }
-            draw() {
-                ctx.fillStyle = `hsla(${this.hue}, 85%, 62%, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.closePath();
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < config.particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            if (!canvas) return;
-            ctx.clearRect(0, 0, width, height);
-           
-            for (let a = 0; a < particles.length; a++) {
-                for (let b = a + 1; b < particles.length; b++) {
-                    const dx = particles[a].x - particles[b].x;
-                    const dy = particles[a].y - particles[b].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < config.connectionDistance) {
-                        const opacity = (1 - (distance / config.connectionDistance)) * 0.12;
-                        ctx.strokeStyle = `hsla(190, 80%, 65%, ${opacity})`;
-                        ctx.lineWidth = 0.8;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[a].x, particles[a].y);
-                        ctx.lineTo(particles[b].x, particles[b].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        window.addEventListener('resize', resize);
-        resize();
-        animate();
-
-        
-        const slider = document.getElementById('slider');
-        const leftBtn = document.getElementById('slideLeft');
-        const rightBtn = document.getElementById('slideRight');
-        const cards = document.querySelectorAll('#slider .shame-card');
-
-        let currentIndex = 0;
-        let isProgrammaticScroll = false;
-        let scrollEndTimer = null;
-
-        function scrollToCard(index) {
-            const card = cards[index];
-            if (!card) return;
-            isProgrammaticScroll = true;
-            clearTimeout(scrollEndTimer);
-            const offset = card.offsetLeft - (slider.clientWidth / 2) + (card.offsetWidth / 2);
-            slider.scrollTo({ left: offset, behavior: 'smooth' });
-            scrollEndTimer = setTimeout(() => {
-                isProgrammaticScroll = false;
-            }, 450);
-        }
-
-        function updateArrows() {
-            leftBtn.classList.toggle('hidden', currentIndex === 0);
-            rightBtn.classList.toggle('hidden', currentIndex === cards.length - 1);
-        }
-
-        leftBtn.addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                scrollToCard(currentIndex);
-                updateArrows();
-            }
-        });
-
-        rightBtn.addEventListener('click', () => {
-            if (currentIndex < cards.length - 1) {
-                currentIndex++;
-                scrollToCard(currentIndex);
-                updateArrows();
-            }
-        });
-
-        slider.addEventListener('scroll', () => {
-            if (isProgrammaticScroll) return;
-            let closest = 0;
-            let closestDist = Infinity;
-            cards.forEach((card, i) => {
-                const dist = Math.abs(card.getBoundingClientRect().left - slider.getBoundingClientRect().left);
-                if (dist < closestDist) {
-                    closestDist = dist;
-                    closest = i;
-                }
-            });
-            currentIndex = closest;
-            updateArrows();
-        });
-
-        setTimeout(updateArrows, 100);
-
-        
-        function initCards(selector) {
-            document.querySelectorAll(selector).forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -10;
-                    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 10;
-                    card.style.setProperty('--rx', `${rotateX}deg`);
-                    card.style.setProperty('--ry', `${rotateY}deg`);
-                });
-                card.addEventListener('mouseleave', () => {
-                    card.style.setProperty('--rx', '0deg');
-                    card.style.setProperty('--ry', '0deg');
-                });
-                card.addEventListener('click', () => {
-                    modalTitle.textContent = card.getAttribute('data-title');
-                    modalDesc.textContent = card.getAttribute('data-desc');
-                    modalImg.src = card.getAttribute('data-img');
-                    modal.classList.add('active');
-                });
-            });
-        }
-
-        initCards('.shame-card');
-
-        const modal = document.getElementById('modal');
-        const modalImg = document.getElementById('modal-img');
-        const modalTitle = document.getElementById('modal-title');
-        const modalDesc = document.getElementById('modal-desc');
-        const closeBtn = document.querySelector('.close-modal');
-
-        function closeModal() {
-            modal.classList.remove('active');
-        }
-
-        closeBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
-        });
+    intro.addEventListener('click', enterSite);
+    intro.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); enterSite(); }
     });
-  </script>
+
+    const larpCfg = config.larpLink || {};
+    const larpLink = document.getElementById('larp-link');
+    if (larpLink) {
+      larpLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.open(larpCfg.default || '#', '_blank');
+      });
+    }
+
+    initMatch(config);
+    initParticles(config);
+  }
+
+  function initMatch(config) {
+    const out = document.getElementById('match-out');
+    const list = document.getElementById('match-list');
+    const input = document.getElementById('match-input');
+    const btn = document.getElementById('match-btn');
+    if (!out || !list || !input || !btn) return;
+
+    const endpoint = (config && config.deezerEndpoint) || 'https://api.deezer.com/search/track';
+
+    function norm(s) {
+      return String(s).toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+
+    function levenshtein(a, b) {
+      const m = a.length, n = b.length;
+      if (!m) return n;
+      if (!n) return m;
+      const prev = new Array(n + 1);
+      const cur = new Array(n + 1);
+      for (let j = 0; j <= n; j++) prev[j] = j;
+      for (let i = 1; i <= m; i++) {
+        cur[0] = i;
+        for (let j = 1; j <= n; j++) {
+          const c = a[i - 1] === b[j - 1] ? 0 : 1;
+          cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + c);
+        }
+        for (let j = 0; j <= n; j++) prev[j] = cur[j];
+      }
+      return prev[n];
+    }
+
+    function scoreLine(user, title) {
+      const a = norm(user);
+      const b = norm(title);
+      if (!a || !b) return 0;
+      if (a === b) return 100;
+      if (a.includes(b) || b.includes(a)) return 95;
+      const d = levenshtein(a, b);
+      const m = Math.max(a.length, b.length);
+      return m ? Math.max(0, Math.round(100 * (1 - d / m))) : 0;
+    }
+
+    function bestScoreForTrack(user, t) {
+      return Math.max(scoreLine(user, t.title || ''), scoreLine(user, t.title_short || ''));
+    }
+
+    function jsonpDeezerSearch(q) {
+      return new Promise(function (resolve, reject) {
+        const cb = 'dzcb' + Date.now() + Math.random().toString(36).slice(2, 9);
+        const script = document.createElement('script');
+        const tmr = setTimeout(function () {
+          cleanup();
+          reject(new Error('Request timed out.'));
+        }, 20000);
+        function cleanup() {
+          clearTimeout(tmr);
+          try { delete window[cb]; } catch (e) {}
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+        window[cb] = function (payload) {
+          cleanup();
+          if (payload && payload.error) {
+            reject(new Error((payload.error && payload.error.message) || 'Search error.'));
+            return;
+          }
+          resolve(payload);
+        };
+        script.onerror = function () {
+          cleanup();
+          reject(new Error('Could not reach the search service.'));
+        };
+        script.src = endpoint + '?q=' + encodeURIComponent(q) + '&limit=30&output=jsonp&callback=' + cb;
+        document.head.appendChild(script);
+      });
+    }
+
+    function runCompare() {
+      const raw = input.value;
+      out.classList.remove('err');
+      list.innerHTML = '';
+      list.hidden = true;
+
+      if (!norm(raw)) {
+        out.textContent = 'Type a song title (or part of one) to compare.';
+        return;
+      }
+
+      btn.disabled = true;
+      out.textContent = 'Loading song names…';
+      jsonpDeezerSearch(raw)
+        .then(function (payload) {
+          const tracks = (payload && payload.data) || [];
+          if (!tracks.length) {
+            out.textContent = 'No tracks found for that search. Try different words.';
+            return;
+          }
+          const rows = tracks.map(function (t) {
+            return {
+              title: t.title,
+              title_short: t.title_short,
+              artist: (t.artist && t.artist.name) || '—',
+              score: bestScoreForTrack(raw, t)
+            };
+          });
+          rows.sort(function (a, b) { return b.score - a.score; });
+          const top = rows.slice(0, 8);
+          out.textContent = 'Your text vs titles returned for “' + raw.replace(/</g, '') + '”';
+          top.forEach(function (r) {
+            const li = document.createElement('li');
+            const left = document.createElement('div');
+            left.className = 'row-text';
+            const title = document.createElement('div');
+            title.className = 'title';
+            title.textContent = r.title;
+            const artist = document.createElement('div');
+            artist.className = 'artist';
+            artist.textContent = r.artist;
+            left.appendChild(title);
+            left.appendChild(artist);
+            const pill = document.createElement('span');
+            let pillCls = 'match-pill';
+            if (r.score >= 85) pillCls += ' strong';
+            else if (r.score < 55) pillCls += ' weak';
+            pill.className = pillCls;
+            pill.textContent = r.score + '%';
+            li.appendChild(left);
+            li.appendChild(pill);
+            list.appendChild(li);
+          });
+          list.hidden = false;
+        })
+        .catch(function (err) {
+          out.classList.add('err');
+          out.textContent = err && err.message ? err.message : 'Something went wrong.';
+        })
+        .then(function () {
+          btn.disabled = false;
+        });
+    }
+
+    btn.addEventListener('click', runCompare);
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') runCompare();
+    });
+  }
+
+  function initParticles(config) {
+    const canvas = document.getElementById('particle-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d', { alpha: true });
+    const pcfg = (config && config.particles) || {};
+
+    const settings = {
+      particleCount: window.innerWidth < 600 ? (pcfg.mobileCount || 28) : (pcfg.desktopCount || 48),
+      connectionDistance: pcfg.connectionDistance || 100,
+      mouseRepelDist: pcfg.mouseRepelDist || 90,
+      mouseForce: pcfg.mouseForce || 2.4,
+      baseSpeed: pcfg.baseSpeed || 0.18
+    };
+    const MOUSE_SMOOTH = pcfg.mouseSmooth || 0.1;
+
+    let dpr = 1;
+    let width, height;
+    let particles = [];
+
+    const targetMouse = { x: null, y: null };
+    const mouse = { x: null, y: null };
+
+    window.addEventListener('mousemove', function (e) {
+      targetMouse.x = e.clientX;
+      targetMouse.y = e.clientY;
+    });
+    window.addEventListener('mouseout', function () {
+      targetMouse.x = null;
+      targetMouse.y = null;
+    });
+
+    function syncMouse() {
+      if (targetMouse.x == null) { mouse.x = null; mouse.y = null; return; }
+      if (mouse.x == null) { mouse.x = targetMouse.x; mouse.y = targetMouse.y; return; }
+      mouse.x += (targetMouse.x - mouse.x) * MOUSE_SMOOTH;
+      mouse.y += (targetMouse.y - mouse.y) * MOUSE_SMOOTH;
+    }
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      initParticleSet();
+    }
+
+    class Particle {
+      constructor() { this.reset(true); }
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.size = Math.random() * 1.2 + 0.6;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = settings.baseSpeed * (0.6 + Math.random() * 0.8);
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.opacity = Math.random() * 0.35 + 0.15;
+        this.hue = 185 + Math.random() * 20;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (mouse.x !== null) {
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < settings.mouseRepelDist && distance > 0) {
+            const force = (settings.mouseRepelDist - distance) / settings.mouseRepelDist;
+            this.x -= (dx / distance) * force * settings.mouseForce;
+            this.y -= (dy / distance) * force * settings.mouseForce;
+          }
+        }
+        if (this.x < 0) this.x = width;
+        if (this.x > width) this.x = 0;
+        if (this.y < 0) this.y = height;
+        if (this.y > height) this.y = 0;
+      }
+      draw() {
+        ctx.fillStyle = 'hsla(' + this.hue + ', 85%, 62%, ' + this.opacity + ')';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+
+    function initParticleSet() {
+      particles = [];
+      for (let i = 0; i < settings.particleCount; i++) particles.push(new Particle());
+    }
+
+    function animate() {
+      syncMouse();
+      if (!document.hidden) {
+        ctx.clearRect(0, 0, width, height);
+        for (let a = 0; a < particles.length; a++) {
+          for (let b = a + 1; b < particles.length; b++) {
+            const dx = particles[a].x - particles[b].x;
+            const dy = particles[a].y - particles[b].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < settings.connectionDistance) {
+              const opacity = (1 - (distance / settings.connectionDistance)) * 0.075;
+              ctx.strokeStyle = 'hsla(190, 80%, 65%, ' + opacity + ')';
+              ctx.lineWidth = 0.8;
+              ctx.beginPath();
+              ctx.moveTo(particles[a].x, particles[a].y);
+              ctx.lineTo(particles[b].x, particles[b].y);
+              ctx.stroke();
+            }
+          }
+        }
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update();
+          particles[i].draw();
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    animate();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    loadApi()
+      .then(function (config) {
+        const boot = document.getElementById('boot-screen');
+        if (boot) boot.classList.add('fade');
+        document.body.classList.add('app-ready');
+        bootstrap(config || {});
+      })
+      .catch(function (err) {
+        showBootError(err && err.message ? err.message : 'Failed to load.');
+        console.error(err);
+      });
+  });
+})();
+</script>
 </body>
 </html>

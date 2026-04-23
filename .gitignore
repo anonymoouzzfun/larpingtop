@@ -1,0 +1,13 @@
+# The worker source IS the api. Never commit it to a public repo —
+# anyone with these files can rebuild the site's design and content.
+worker/
+
+# Local tooling / build artifacts
+.venv-*/
+.wrangler/
+node_modules/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
