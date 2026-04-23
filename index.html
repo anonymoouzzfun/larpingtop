@@ -65,6 +65,15 @@
 <div id="app"></div>
 
 <script>
+window.RufflePlayer = window.RufflePlayer || {};
+window.RufflePlayer.config = {
+  autoplay: "on",
+  unmuteOverlay: "hidden",
+  showSwfDownload: true
+};
+</script>
+
+<script>
 (function () {
   var API = "https://larping.zmbie.shop";
   function err(m) {
